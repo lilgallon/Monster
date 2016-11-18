@@ -36,7 +36,7 @@ void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne){
 * -                                                         *
 ************************************************************/
 //// Fonctions
-void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne)
+void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne, int nbMonster)
 {
 
    initTabLevel(grille,taille_colonne,taille_ligne);
@@ -44,6 +44,7 @@ void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_lig
    switch(lvl){
        case 1 :
        // grille[ligne][colonne]
+           nbMonster = 1;
            grille[2][3]= Wall;
            grille[7][0]= Ice;
            grille[5][3]= Awake;

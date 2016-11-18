@@ -168,8 +168,9 @@ int main()
     // TEst pour la grille
     grilleLevel grille;
     int lvl = 1;
+    int nbMonster;
 
-    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE);
+    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,nbMonster);
 
 
 //        fin test pour la grille
