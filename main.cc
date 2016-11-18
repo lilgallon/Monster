@@ -103,9 +103,6 @@ int main()
     // TEst pour la grille
     grilleLevel grille;
     int lvl = 1;
-    int nbMonster;
-
-    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,nbMonster);
 
 
     while (!quit){
@@ -144,7 +141,7 @@ int main()
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,nbMonster);
+            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE);
             //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
 
