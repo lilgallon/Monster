@@ -10,20 +10,19 @@
 
 #include "level.h"
 
-using namespace std;
 
 
 
 /*********************************
  * FONCTIONS D'IMAGES
  * *******************************/
-SDL_Surface *loadImage( string filename );
+SDL_Surface *loadImage( std::string filename );
 
 /*********************************
  * Fonctions d'application d'images
  * *******************************/
 void applySurface(int x, int y, SDL_Surface* source,SDL_Surface* destination, SDL_Rect* clip);
-SDL_Surface * loadImageWithColorKey(string filename, int r, int g, int b);
+SDL_Surface * loadImageWithColorKey(std::string filename, int r, int g, int b);
 
 void affichageTerminal(grilleLevel grille, int tailleL,int tailleC);
 

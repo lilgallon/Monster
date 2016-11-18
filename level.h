@@ -5,7 +5,6 @@
 #include "monster.h"
 #include "array"
 
-using namespace std;
 
 // Pour les fleches: dirige vers GAUCHE,DROIT,BAS, ou HAUT
 //const int GAUCHE=4;
@@ -23,10 +22,10 @@ const int Ice = 2;
 const int Awake = 3;
 const int Sleep = 4;
 
-using grilleLevel = array<array<int,TAILLE_COLONNE>,TAILLE_LIGNE>;
+using grilleLevel = std::array<std::array<int,TAILLE_COLONNE>,TAILLE_LIGNE>;
 
 ////Définition des prototypes de fonctions
-void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne);
+void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne, int nbMonster);
 void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne);
 
 #endif

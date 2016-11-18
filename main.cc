@@ -255,8 +255,8 @@ int main()
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE);
-            affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
+            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,nbMonster);
+            //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
 
             while(SDL_PollEvent(&event)){
@@ -277,6 +277,10 @@ int main()
                         }
 
                     }
+                }
+
+                if (swipe() !=0){
+                cout << "Swipe ok" << endl;
                 }
 
 
