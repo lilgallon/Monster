@@ -13,7 +13,7 @@ int valAbsolue(int val)
     return val;
 }
 
-int deplacement(SDL_Event &eventM, coord &mouseDown, coord &mouseDownReleased, coord &swipe)
+int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe)
 {
         if (eventM.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -36,35 +36,33 @@ int deplacement(SDL_Event &eventM, coord &mouseDown, coord &mouseDownReleased, c
                 if (mouseDownReleased.x>0 && swipe.x>swipe.y)
                 {
                     mouseDownReleased.x=0;
-                    return 1;
+                    return Right;
                 }
 
                 // Gauche
                 else if (mouseDownReleased.x<0 && swipe.x>swipe.y)
                 {
                     mouseDownReleased.x=0;
-                    return 2;
+                    return Left;
                 }
 
                 // Bas
                 else if (mouseDownReleased.y>0 && swipe.y>swipe.x)
                 {
                     mouseDownReleased.y=0;
-                    return 3;
+                    return Down;
                 }
 
                 // Haut
                 else if (mouseDownReleased.y<0 && swipe.y>swipe.x)
                 {
                     mouseDownReleased.y=0;
-                    return 4;
+                    return Up;
                 }
 
             }
 
         }
-
-
-    return 0;
+        return Null;
 }
 

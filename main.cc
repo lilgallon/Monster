@@ -198,7 +198,7 @@ int main()
 
 
                 dir = deplacement(eventM,mouseDown,mouseDownReleased,swipe);
-                if (dir!=0)
+                if (dir != Null)
                 {
                     cout << dir << endl;
                 }

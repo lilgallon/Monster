@@ -9,6 +9,8 @@ struct coord{
     int y=0;
 };
 
-int deplacement(SDL_Event &eventM, coord &mouseDown, coord &mouseDownReleased, coord &swipe);
+enum {Null, Left, Right, Up, Down};
+
+int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
 
 #endif // DEPLACEMENT_H
