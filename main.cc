@@ -154,7 +154,7 @@ int main()
                 }
 
 
-                dir = deplacement(eventM,mouseDown,mouseDownReleased,swipe);
+                dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
                 if (dir != Null)
                 {
                     cout << dir << endl;

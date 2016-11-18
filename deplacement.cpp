@@ -5,7 +5,19 @@
 
 using namespace std;
 
-int valAbsolue(int val)
+
+/****************** Nom de la fonction **********************
+* absoluteValue                                             *
+******************** Auteur , Dates *************************
+* Tristan RENAUDON, 09/11/16                                *
+********************* Description ***************************
+* Convertie une valeur en valeur absolue                    *
+*********************** Entrées *****************************
+* Une valeur entière                                        *
+*********************** Sorties *****************************
+* La valeur absolue                                         *
+************************************************************/
+int absoluteValue(int val)
 {
     if(val<=0)
     {
@@ -14,7 +26,21 @@ int valAbsolue(int val)
     return val;
 }
 
-int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe)
+
+/****************** Nom de la fonction **********************
+* direction                                                 *
+******************** Auteur , Dates *************************
+* Tristan RENAUDON, 09/11/16                                *
+********************* Description ***************************
+* Donne la direction choisie en fonction du mouvement de la *
+* souris                                                    *
+*********************** Entrées *****************************
+* Une gestion d'évènement, les coordonnées de la souris     *
+* clic enfoncé + clic relaché, valeur absolue de la distance*
+*********************** Sorties *****************************
+* Direction choisie                                         *
+************************************************************/
+int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe)
 {
         if (eventM.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -30,8 +56,8 @@ int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, co
                 mouseDownReleased.x=eventM.button.x-mouseDown.x;
                 mouseDownReleased.y=eventM.button.y-mouseDown.y;
 
-                swipe.x=valAbsolue(mouseDownReleased.x);
-                swipe.y=valAbsolue(mouseDownReleased.y);
+                swipe.x=absoluteValue(mouseDownReleased.x);
+                swipe.y=absoluteValue(mouseDownReleased.y);
 
                 // Droite
                 if (mouseDownReleased.x>0 && swipe.x>swipe.y)
@@ -67,7 +93,20 @@ int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, co
         return Null;
 }
 
-void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
+
+/****************** Nom de la fonction **********************
+* monsterMovement                                           *
+******************** Auteur , Dates *************************
+* Tristan RENAUDON, 09/11/16                                *
+********************* Description ***************************
+* Déplace le monstre en fonction des evènements du jeux     *
+*********************** Entrées *****************************
+* La matrice, la direction choisie, la ligne et la colonne  *
+* du monstre                                                *
+*********************** Sorties *****************************
+* Le tableau modifié                                        *
+************************************************************/
+void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
 {
     bool exit=false;
 

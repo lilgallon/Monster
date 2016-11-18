@@ -3,7 +3,7 @@
 #include <SDL/SDL.h>
 #include "level.h"
 
-int valAbsolue(int val);
+int absoluteValue(int val);
 
 struct coord{
     int x=0;
@@ -12,8 +12,8 @@ struct coord{
 
 enum {Null, Left, Right, Up, Down};
 
-int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
-void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne);
+int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
+void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne);
 
 
 #endif // DEPLACEMENT_H

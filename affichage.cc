@@ -145,8 +145,8 @@ bool overCircle(int circleX, int circleY, int circleR){
     int dist_x = circleX - mouseX;
     int dist_y = circleY - mouseY;
 
-    dist_x_abs=valAbsolue(dist_x);
-    dist_y_abs=valAbsolue(dist_y);
+    dist_x_abs=absoluteValue(dist_x);
+    dist_y_abs=absoluteValue(dist_y);
 
     if(dist_x_abs<=circleR && dist_y_abs<=circleR){
         return true;
