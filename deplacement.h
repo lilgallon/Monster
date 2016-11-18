@@ -1,6 +1,7 @@
 #ifndef DEPLACEMENT_H
 #define DEPLACEMENT_H
 #include <SDL/SDL.h>
+#include "level.h"
 
 int valAbsolue(int val);
 

@@ -75,11 +75,11 @@ void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
     {
        while(ligne-1>=0 && !exit)
        {
-           if(grille[ligne-1]==0)
+           if(grille[ligne-1][colonne]==0)
            {
                ligne--;
            }
-           else if(grille[ligne-1]==2)
+           else if(grille[ligne-1][colonne]==2)
            {
                ligne--;
                exit=true;
@@ -94,11 +94,11 @@ void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
     {
         while(ligne+1<TAILLE_LIGNE && !exit)
         {
-            if(grille[ligne+1]==0)
+            if(grille[ligne+1][colonne]==0)
             {
                 ligne++;
             }
-            else if(grille[ligne+1]==2)
+            else if(grille[ligne+1][colonne]==2)
             {
                 ligne++;
                 exit=true;
@@ -114,11 +114,11 @@ void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
     {
         while(colonne-1>=0 && !exit)
         {
-            if(grille[colonne-1]==0)
+            if(grille[ligne][colonne-1]==0)
             {
                 colonne--;
             }
-            else if(grille[colonne-1]==2)
+            else if(grille[ligne][colonne-1]==2)
             {
                 colonne--;
                 exit=true;
@@ -133,11 +133,11 @@ void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
     {
         while(ligne+1<TAILLE_COLONNE && !exit)
         {
-            if(grille[colonne+1]==0)
+            if(grille[ligne][colonne+1]==0)
             {
                 colonne++;
             }
-            else if(grille[colonne+1]==2)
+            else if(grille[ligne][colonne+1]==2)
             {
                 colonne++;
                 exit=true;
