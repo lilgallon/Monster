@@ -28,71 +28,12 @@ const int NB_LEVEL = 6;
 //const int Jeu = 2;
 enum {Menu,Jeu};
 
-int swipe(){
-
-    coord mouseDown;
-    coord mouseDownReleased;
-    coord swipe;
-    SDL_Event eventM;
-
-    if (eventM.type == SDL_MOUSEBUTTONDOWN)
-    {
-        mouseDown.x=eventM.button.x;
-        mouseDown.y=eventM.button.y;
-    }
-
-    if (eventM.type == SDL_MOUSEBUTTONUP)
-    {
-
-        if (eventM.button.button==SDL_BUTTON_LEFT)
-        {
-            mouseDownReleased.x=eventM.button.x-mouseDown.x;
-            mouseDownReleased.y=eventM.button.y-mouseDown.y;
-
-            swipe.x=valAbsolue(mouseDownReleased.x);
-            swipe.y=valAbsolue(mouseDownReleased.y);
-
-            if (mouseDownReleased.x>0 && swipe.x>swipe.y)
-            {
-                cout << "Droite" << endl;
-                cout << mouseDownReleased.x << " " << mouseDown.x << endl;
-                mouseDownReleased.x=0;
-                return 1;
-            }
-            else if (mouseDownReleased.x<0 && swipe.x>swipe.y)
-            {
-                cout << "Gauche" << endl;
-                cout << mouseDownReleased.x << " " << mouseDown.x << endl;
-                mouseDownReleased.x=0;
-                return 2;
-            }
-            else if (mouseDownReleased.y>0 && swipe.y>swipe.x)
-            {
-                cout << "Bas" << endl;
-                cout << mouseDownReleased.y << " " << mouseDown.y << endl;
-                mouseDownReleased.y=0;
-                return 3;
-            }
-            else if (mouseDownReleased.y<0 && swipe.y>swipe.x)
-            {
-                cout << "Haut" << endl;
-                cout << mouseDownReleased.y << " " << mouseDown.y << endl;
-                mouseDownReleased.y=0;
-                return 4;
-            }
-
-        }
-
-    }
-    return 0;
-
-}
-
 int main()
 {
     int Etat_Jeu=Menu;
     bool quit = false;
     bool surPlay = false;
+    int dir;
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -105,7 +46,11 @@ int main()
     SDL_Surface *imgAwake;
     SDL_Surface *imgSleep;
 
-    SDL_Event event;
+    SDL_Event event, eventM;
+
+    coord mouseDown;
+    coord mouseDownReleased;
+    coord swipe;
 
     screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
     fondAccueil1=loadImage("menu.bmp");
@@ -246,10 +191,18 @@ int main()
             //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
 
-            while(SDL_PollEvent(&event)){
-                if(event.type==SDL_QUIT){
+            while(SDL_PollEvent(&eventM)){
+                if(eventM.type==SDL_QUIT){
                     quit=true;
                 }
+
+
+                dir = deplacement(eventM,mouseDown,mouseDownReleased,swipe);
+                if (dir!=0)
+                {
+                    cout << dir << endl;
+                }
+
 
                 for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
                     for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
@@ -266,9 +219,6 @@ int main()
                     }
                 }
 
-                if (swipe() !=0){
-                cout << "Swipe ok" << endl;
-                }
 
 
 
