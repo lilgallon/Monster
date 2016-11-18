@@ -25,7 +25,7 @@ const int Sleep = 4;
 using grilleLevel = std::array<std::array<int,TAILLE_COLONNE>,TAILLE_LIGNE>;
 
 ////Définition des prototypes de fonctions
-void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne, int nbMonster);
+void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne, int &nbMonster);
 void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne);
 
 #endif

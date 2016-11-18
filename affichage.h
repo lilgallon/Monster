@@ -26,6 +26,9 @@ SDL_Surface * loadImageWithColorKey(std::string filename, int r, int g, int b);
 
 void affichageTerminal(grilleLevel grille, int tailleL,int tailleC);
 
+// autre
+bool overCircle(int circleX, int circleY, int circleR);
+
 
 
 #endif

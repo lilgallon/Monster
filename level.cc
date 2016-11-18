@@ -36,7 +36,7 @@ void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne){
 * -                                                         *
 ************************************************************/
 //// Fonctions
-void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne, int nbMonster)
+void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne, int &nbMonster)
 {
 
    initTabLevel(grille,taille_colonne,taille_ligne);

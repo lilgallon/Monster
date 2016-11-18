@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include "deplacement.h"
+
 using namespace std;
 
 
@@ -119,4 +121,37 @@ void affichageTerminal(grilleLevel grille, int tailleL,int tailleC){
         }
         cout << endl;
     }
+}
+
+/****************** Nom de la fonction **********************
+* overCircle                                                *
+******************** Auteur , Dates *************************
+* Lilian GALLON  18/11/16                                   *
+********************* Description ***************************
+* Permet de savoir quand l'utilisateur a son curseur sur un *
+* un bouton rond                                            *
+*********************** Entrées *****************************
+* Coordonnées X et Y du centre du cercle et son, rayon      *
+*********************** Sorties *****************************
+* Retourne vrai si le curseur est sur le bouton             *
+************************************************************/
+bool overCircle(int circleX, int circleY, int circleR){
+    int mouseX, mouseY;
+    int dist_x_abs;
+    int dist_y_abs;
+
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    int dist_x = circleX - mouseX;
+    int dist_y = circleY - mouseY;
+
+    dist_x_abs=valAbsolue(dist_x);
+    dist_y_abs=valAbsolue(dist_y);
+
+    if(dist_x_abs<=circleR && dist_y_abs<=circleR){
+        return true;
+    }else{
+        return false;
+    }
+
 }

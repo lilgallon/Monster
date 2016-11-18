@@ -23,16 +23,12 @@ const int ECRAN_HEIGHT = 568;
 const int ECRAN_BPP = 32;
 const int NB_LEVEL = 6;
 
-// Variables pour l'etat du jeu
-//const int Menu = 1;
-//const int Jeu = 2;
 enum {Menu,Jeu};
 
 int main()
 {
     int Etat_Jeu=Menu;
     bool quit = false;
-    bool surPlay = false;
     int dir;
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -67,8 +63,15 @@ int main()
     // Décalage initial y: -40
     // Dimensions d'une case: x:60 , y: 50
     // Décalage entre chaque ligne : y: 3
-        int decaly = 0;//40;
-        int decalx = 20;//20;
+        int decaly = 16;
+        int decalx = 33;
+
+        int decalySleep = 8;
+        int decalxSleep = 23;
+
+        int decalyWall = 9;
+        int decalxWall = 25;
+
         int coefy = 60;
         int coefx = 52;
 
@@ -105,20 +108,10 @@ int main()
     initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,nbMonster);
 
 
-//        fin test pour la grille
-
-
     while (!quit){
         switch(Etat_Jeu){
             case Menu:
-            if(surPlay==true)
-            {
-                applySurface(0,0,fondAccueil2,screen,NULL);
-            }
-            else if(surPlay==false)
-            {
-                applySurface(0,0,fondAccueil1,screen,NULL);
-            }
+
 
             SDL_Flip(screen);
 
@@ -126,57 +119,21 @@ int main()
             while(SDL_PollEvent(&event))
             {
 
-                // Gestion des évènements liées aux clics de la souris
-                if( event.type == SDL_MOUSEBUTTONDOWN )
-                {
-                    int x = event.button.x;
-                    int y = event.button.y;
-
-                    int dist_x = BOUTON_MIDDLE_X - x;
-                    int dist_y = BOUTON_MIDDLE_Y - y;
-
-                    int dist_x_abs;
-                    int dist_y_abs;
-
-                    dist_x_abs=valAbsolue(dist_x);
-                    dist_y_abs=valAbsolue(dist_y);
-
-                    // Survol de play
-                    if(dist_x_abs<=BOUTON_RAYON && dist_y_abs<=BOUTON_RAYON)
-                    {
-                        // Clic sur play
-                        if(event.button.button==SDL_BUTTON_LEFT)
-                        {
-                            Etat_Jeu= Jeu;
-                        }
-
-                    }
+                if(event.type==SDL_QUIT){
+                    quit=true;
                 }
 
-                if (event.type == SDL_MOUSEMOTION)
-                {
-                    int x = event.button.x;
-                    int y = event.button.y;
-
-                    int dist_x = BOUTON_MIDDLE_X - x;
-                    int dist_y = BOUTON_MIDDLE_Y - y;
-
-                    int dist_x_abs;
-                    int dist_y_abs;
-
-                    dist_x_abs=valAbsolue(dist_x);
-                    dist_y_abs=valAbsolue(dist_y);
-
-                    if(dist_x_abs<=BOUTON_RAYON && dist_y_abs<=BOUTON_RAYON)
-                    {
-                        surPlay=true;
+                if(overCircle(BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON)){
+                    applySurface(0,0,fondAccueil2,screen,NULL);
+                    if(event.type==SDL_MOUSEBUTTONDOWN){
+                        Etat_Jeu=Jeu;
                     }
-                    else
-                    {
-                        surPlay=false;
-                    }
+                }else{
+                    applySurface(0,0,fondAccueil1,screen,NULL);
                 }
+
             }
+
             break;
 
 
@@ -207,11 +164,11 @@ int main()
                 for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
                     for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
                         if(grille[ligne][colonne]==Wall){
-                            applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgMur,screen,&clipWall);
+                            applySurface(colonne*coefy+decalyWall,ligne*coefx+decalxWall,imgMur,screen,&clipWall);
                         }else if(grille[ligne][colonne]==Ice){
                             applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgIce,screen,&clipIce);
                         }else if(grille[ligne][colonne]==Sleep){
-                            applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgSleep,screen,&clipSleep);
+                            applySurface(colonne*coefy+decalySleep,ligne*coefx+decalxSleep,imgSleep,screen,&clipSleep);
                         }else if(grille[ligne][colonne]==Awake){
                             applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgAwake,screen,&clipAwake);
                         }
