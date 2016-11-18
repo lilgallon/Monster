@@ -24,10 +24,6 @@ void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne){
 }
 
 
-void initObjet(){
-
-}
-
 
 /****************** Nom de la fonction **********************
 * initTabLevel                                              *

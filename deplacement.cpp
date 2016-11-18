@@ -117,6 +117,7 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
        {
            if(grille[ligne-1][colonne]==0)
            {
+               cout << "Test UP rien après" << endl;
                grille[ligne][colonne]=Void;
                ligne--;
                grille[ligne][colonne]=Awake;
@@ -126,6 +127,12 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
                grille[ligne+1][colonne] = Void;
                grille[ligne][colonne] =  Awake;
                grille[ligne-1][colonne] =  Void;
+               exit=true;
+           }else if(grille[ligne-1][colonne]==Wall)
+           {
+               cout << "Test UP wall après" << endl;
+               grille[ligne+1][colonne] = Void;
+               grille[ligne][colonne] =  Awake;
                exit=true;
            }
            else
@@ -153,7 +160,12 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
                 grille[ligne-1][colonne] = Void;
                 grille[ligne][colonne] =  Awake;
                 grille[ligne+1][colonne] =  Void;
-                ligne++;
+                exit=true;
+            }
+            else if(grille[ligne+1][colonne]==Wall)
+            {
+                grille[ligne-1][colonne] = Void;
+                grille[ligne][colonne] =  Awake;
                 exit=true;
             }
             else
@@ -184,6 +196,12 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
                 grille[ligne][colonne-1] =  Void;
                 exit=true;
             }
+            else if(grille[ligne][colonne-1]==Wall)
+            {
+                grille[ligne][colonne+1]=Void;
+                grille[ligne][colonne] =  Awake;
+                exit=true;
+            }
             else
             {
                 exit=true;
@@ -209,6 +227,12 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
                 grille[ligne][colonne-1]=Void;
                 grille[ligne][colonne] =  Awake;
                 grille[ligne][colonne+1] =  Void;
+                exit=true;
+            }
+            else if(grille[ligne][colonne+1]==Wall)
+            {
+                grille[ligne][colonne-1]=Void;
+                grille[ligne][colonne] =  Awake;
                 exit=true;
             }
             else

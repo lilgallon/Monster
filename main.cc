@@ -31,6 +31,8 @@ int main()
     bool quit = false;
     int dir;
 
+    bool init = false;
+
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_Surface *fondAccueil1, *fondAccueil2;
@@ -181,7 +183,9 @@ int main()
                     cout << dir << endl;
                 }
 
-                if (dir != Null){
+                if (dir != Null && init){
+                    affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
+                    cout << "*********" << endl;
                     if(!monsterMovement(grille,dir,awake[0].ligne,awake[0].colonne)){
                         cout << "Lose" << endl;
                         quit = true;
@@ -189,8 +193,10 @@ int main()
                         cout << "Win" << endl;
                         quit = true;
                     }
+                    affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
                 }
+                init = true;
 
 
 
