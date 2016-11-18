@@ -106,7 +106,7 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 *********************** Sorties *****************************
 * Le tableau modifié, si le joueur est en vie               *
 ************************************************************/
-bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
+bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
 {
     bool exit=false;
     bool alive=true;
@@ -117,11 +117,15 @@ bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
        {
            if(grille[ligne-1][colonne]==0)
            {
+               grille[ligne][colonne]=Void;
                ligne--;
+               grille[ligne][colonne]=Awake;
            }
-           else if(grille[ligne-1][colonne]==2)
+           else if(grille[ligne-1][colonne]==Ice)
            {
-               ligne--;
+               grille[ligne+1][colonne] = Void;
+               grille[ligne][colonne] =  Awake;
+               grille[ligne-1][colonne] =  Void;
                exit=true;
            }
            else
@@ -140,10 +144,15 @@ bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
         {
             if(grille[ligne+1][colonne]==0)
             {
+                grille[ligne][colonne]=Void;
                 ligne++;
+                grille[ligne][colonne]=Awake;
             }
-            else if(grille[ligne+1][colonne]==2)
+            else if(grille[ligne+1][colonne]==Ice)
             {
+                grille[ligne-1][colonne] = Void;
+                grille[ligne][colonne] =  Awake;
+                grille[ligne+1][colonne] =  Void;
                 ligne++;
                 exit=true;
             }
@@ -162,13 +171,17 @@ bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
     {
         while(colonne-1>=0 && !exit)
         {
-            if(grille[ligne][colonne-1]==0)
+            if(grille[ligne][colonne-1]==Void)
             {
+                grille[ligne][colonne]=Void;
                 colonne--;
+                grille[ligne][colonne]=Awake;
             }
-            else if(grille[ligne][colonne-1]==2)
+            else if(grille[ligne][colonne-1]==Ice)
             {
-                colonne--;
+                grille[ligne][colonne+1]=Void;
+                grille[ligne][colonne] =  Awake;
+                grille[ligne][colonne-1] =  Void;
                 exit=true;
             }
             else
@@ -185,13 +198,17 @@ bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
     {
         while(ligne+1<TAILLE_COLONNE && !exit)
         {
-            if(grille[ligne][colonne+1]==0)
+            if(grille[ligne][colonne+1]==Void)
             {
+                grille[ligne][colonne]=Void;
                 colonne++;
+                grille[ligne][colonne]=Awake;
             }
-            else if(grille[ligne][colonne+1]==2)
+            else if(grille[ligne][colonne+1]==Ice)
             {
-                colonne++;
+                grille[ligne][colonne-1]=Void;
+                grille[ligne][colonne] =  Awake;
+                grille[ligne][colonne+1] =  Void;
                 exit=true;
             }
             else

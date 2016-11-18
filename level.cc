@@ -41,15 +41,15 @@ void initObjet(){
 * -                                                         *
 ************************************************************/
 //// Fonctions
-void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne)
+void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne, objectTab &wall, objectTab &ice, objectTab &awake, objectTab &sleep)
 {
 
     initTabLevel(grille,taille_colonne,taille_ligne);
 
-    objectTab wall;
-    objectTab ice;
-    objectTab awake;
-    objectTab sleep;
+//    objectTab wall;
+//    objectTab ice;
+//    objectTab awake;
+//    objectTab sleep;
 
     // Initialise les positions des objets
     switch(lvl){

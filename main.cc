@@ -48,6 +48,11 @@ int main()
     coord mouseDownReleased;
     coord swipe;
 
+        objectTab wall;
+        objectTab ice;
+        objectTab awake;
+        objectTab sleep;
+
     screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
     fondAccueil1=loadImage("menu.bmp");
     fondAccueil2=loadImage("menu_play.bmp");
@@ -141,7 +146,7 @@ int main()
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE);
+            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wall,ice,awake,sleep);
             //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
 
@@ -151,13 +156,8 @@ int main()
                 }
 
 
-                dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-                if (dir != Null)
-                {
-                    cout << dir << endl;
-                }
 
-
+                // Affichage
                 for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
                     for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
                         if(grille[ligne][colonne]==Wall){
@@ -172,7 +172,25 @@ int main()
 
                     }
                 }
+                // Fin affichage
 
+
+                dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
+                if (dir != Null)
+                {
+                    cout << dir << endl;
+                }
+
+                if (dir != Null){
+                    if(!monsterMovement(grille,dir,awake[0].ligne,awake[0].colonne)){
+                        cout << "Lose" << endl;
+                        quit = true;
+                    }else if(sleep[0].nb==0){
+                        cout << "Win" << endl;
+                        quit = true;
+                    }
+
+                }
 
 
 

@@ -34,7 +34,7 @@ using grilleLevel = std::array<std::array<int,TAILLE_COLONNE>,TAILLE_LIGNE>;
 using objectTab = std::array<objet,NB_MAX_MONSTER>;
 
 ////Définition des prototypes de fonctions
-void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne);
+void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne, objectTab &wall, objectTab &ice, objectTab &awake, objectTab &sleep);
 void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne);
 
 #endif
