@@ -10,6 +10,7 @@
 #include "level.h"
 #include "monster.h"
 #include "affichage.h"
+#include "deplacement.h"
 
 using namespace std;
 
@@ -26,20 +27,6 @@ const int NB_LEVEL = 6;
 //const int Menu = 1;
 //const int Jeu = 2;
 enum {Menu,Jeu};
-
-int valAbsolue(int val)
-{
-    if(val<=0)
-    {
-        val=-val;
-    }
-    return val;
-}
-
-struct coord{
-    int x=0;
-    int y=0;
-};
 
 int swipe(){
 

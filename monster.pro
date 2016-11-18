@@ -11,7 +11,8 @@ SOURCES += \
     level.cc \
     monster.cc \
     affichage.cc \
-    main.cc
+    main.cc \
+    deplacement.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -19,5 +20,6 @@ qtcAddDeployment()
 HEADERS += \
     level.h \
     monster.h \
-    affichage.h
+    affichage.h \
+    deplacement.h
 
