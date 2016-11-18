@@ -1,6 +1,7 @@
 #include <SDL/SDL.h>
 #include <iostream>
 #include "deplacement.h"
+#include "level.h"
 
 using namespace std;
 
@@ -66,3 +67,85 @@ int deplacement(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, co
         return Null;
 }
 
+void deplacementMonstre(grilleLevel &grille, int dir, int ligne, int colonne)
+{
+    bool exit=false;
+
+    if(dir==Up && ligne-1>=0)
+    {
+       while(ligne-1>=0 && !exit)
+       {
+           if(grille[ligne-1]==0)
+           {
+               ligne--;
+           }
+           else if(grille[ligne-1]==2)
+           {
+               ligne--;
+               exit=true;
+           }
+           else
+           {
+               exit=true;
+           }
+       }
+    }
+    else if (dir==Down && ligne+1<TAILLE_LIGNE)
+    {
+        while(ligne+1<TAILLE_LIGNE && !exit)
+        {
+            if(grille[ligne+1]==0)
+            {
+                ligne++;
+            }
+            else if(grille[ligne+1]==2)
+            {
+                ligne++;
+                exit=true;
+            }
+            else
+            {
+                exit=true;
+            }
+        }
+
+    }
+    else if (dir==Left && colonne-1>=0)
+    {
+        while(colonne-1>=0 && !exit)
+        {
+            if(grille[colonne-1]==0)
+            {
+                colonne--;
+            }
+            else if(grille[colonne-1]==2)
+            {
+                colonne--;
+                exit=true;
+            }
+            else
+            {
+                exit=true;
+            }
+        }
+    }
+    else if (dir==Right && colonne+1<TAILLE_COLONNE)
+    {
+        while(ligne+1<TAILLE_COLONNE && !exit)
+        {
+            if(grille[colonne+1]==0)
+            {
+                colonne++;
+            }
+            else if(grille[colonne+1]==2)
+            {
+                colonne++;
+                exit=true;
+            }
+            else
+            {
+                exit=true;
+            }
+        }
+    }
+}
