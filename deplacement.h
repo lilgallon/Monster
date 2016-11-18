@@ -13,7 +13,7 @@ struct coord{
 enum {Null, Left, Right, Up, Down};
 
 int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
-void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne);
+bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne);
 
 
 #endif // DEPLACEMENT_H

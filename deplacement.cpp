@@ -104,11 +104,12 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 * La matrice, la direction choisie, la ligne et la colonne  *
 * du monstre                                                *
 *********************** Sorties *****************************
-* Le tableau modifié                                        *
+* Le tableau modifié, si le joueur est en vie               *
 ************************************************************/
-void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
+bool monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
 {
     bool exit=false;
+    bool alive=true;
 
     if(dir==Up && ligne-1>=0)
     {
@@ -128,6 +129,10 @@ void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
                exit=true;
            }
        }
+       if(ligne-1<0)
+       {
+           alive=false;
+       }
     }
     else if (dir==Down && ligne+1<TAILLE_LIGNE)
     {
@@ -146,6 +151,10 @@ void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
             {
                 exit=true;
             }
+        }
+        if(ligne+1>=TAILLE_LIGNE)
+        {
+            alive=false;
         }
 
     }
@@ -167,6 +176,10 @@ void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
                 exit=true;
             }
         }
+        if(colonne-1<0)
+        {
+            alive=false;
+        }
     }
     else if (dir==Right && colonne+1<TAILLE_COLONNE)
     {
@@ -186,5 +199,10 @@ void monsterMovement(grilleLevel &grille, int dir, int ligne, int colonne)
                 exit=true;
             }
         }
+        if(ligne+1>=TAILLE_COLONNE)
+        {
+            alive=false;
+        }
     }
+    return alive;
 }
