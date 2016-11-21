@@ -108,29 +108,57 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
 {
     bool exit=false;
     bool alive=true;
+    int i=0,j=0;
 
-    if(dir==Up && ligne-1>=0)
+    if(dir==Up)
     {
-       while(ligne-1>=0 && !exit)
+        j=-1;
+        i=0;
+    }
+    else if(dir==Down)
+    {
+        j=1;
+        i=0;
+    }
+    else if(dir==Left)
+    {
+        i=-1;
+        j=0;
+    }
+    else if(dir==Right)
+    {
+        i=1;
+        j=0;
+    }
+
+    if(dir!=Null && ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<=TAILLE_COLONNE)
+    {
+       while(ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<TAILLE_COLONNE && !exit)
        {
-           if(grille[ligne-1][colonne]==0)
+           if(grille[ligne+j][colonne+i]==Void)
            {
-               cout << "Test UP rien après" << endl;
+               cout << "void" << endl;
+
                grille[ligne][colonne]=Void;
-               ligne--;
+               ligne=ligne+j;
+               colonne=colonne+i;
                grille[ligne][colonne]=Awake;
            }
-           else if(grille[ligne-1][colonne]==Ice)
+           else if(grille[ligne+j][colonne+i]==Ice)
            {
-           //    grille[ligne+1][colonne] = Void;
-              // grille[ligne][colonne] =  Awake;
-               grille[ligne-1][colonne] =  Void;
+               cout << "ice" << endl;
+
+               grille[ligne+j][colonne+i] =  Void;
                exit=true;
-           }else if(grille[ligne-1][colonne]==Wall)
+           }
+           else if(grille[ligne+j][colonne+i]==Sleep)
            {
-               cout << "Test UP wall après" << endl;
-              // grille[ligne+1][colonne] = Void;
-              // grille[ligne][colonne] =  Awake;
+               cout << "sleep" << endl;
+               exit=true;
+           }
+           else if(grille[ligne+j][colonne+i]==Wall)
+           {
+               cout << "mur" << endl;
                exit=true;
            }
            else
@@ -138,110 +166,10 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
                exit=true;
            }
        }
-       if(ligne-1<0)
+       if(ligne+j<0 && ligne+j>=TAILLE_LIGNE && colonne+i<0 && colonne+i>=TAILLE_COLONNE)
        {
            alive=false;
        }
-    }
-    else if (dir==Down && ligne+1<TAILLE_LIGNE)
-    {
-        while(ligne+1<TAILLE_LIGNE && !exit)
-        {
-            if(grille[ligne+1][colonne]==0)
-            {
-                grille[ligne][colonne]=Void;
-                ligne++;
-                grille[ligne][colonne]=Awake;
-            }
-            else if(grille[ligne+1][colonne]==Ice)
-            {
-              //  grille[ligne-1][colonne] = Void;
-              // grille[ligne][colonne] =  Awake;
-                grille[ligne+1][colonne] =  Void;
-                exit=true;
-            }
-            else if(grille[ligne+1][colonne]==Wall)
-            {
-                //grille[ligne-1][colonne] = Void;
-               // grille[ligne][colonne] =  Awake;
-                exit=true;
-            }
-            else
-            {
-                exit=true;
-            }
-        }
-        if(ligne+1>=TAILLE_LIGNE)
-        {
-            alive=false;
-        }
-
-    }
-    else if (dir==Left && colonne-1>=0)
-    {
-        while(colonne-1>=0 && !exit)
-        {
-            if(grille[ligne][colonne-1]==Void)
-            {
-                grille[ligne][colonne]=Void;
-                colonne--;
-                grille[ligne][colonne]=Awake;
-            }
-            else if(grille[ligne][colonne-1]==Ice)
-            {
-               // grille[ligne][colonne+1]=Void;
-               // grille[ligne][colonne] =  Awake;
-                grille[ligne][colonne-1] =  Void;
-                exit=true;
-            }
-            else if(grille[ligne][colonne-1]==Wall)
-            {
-                //grille[ligne][colonne+1]=Void;
-                //grille[ligne][colonne] =  Awake;
-                exit=true;
-            }
-            else
-            {
-                exit=true;
-            }
-        }
-        if(colonne-1<0)
-        {
-            alive=false;
-        }
-    }
-    else if (dir==Right && colonne+1<TAILLE_COLONNE)
-    {
-        while(ligne+1<TAILLE_COLONNE && !exit)
-        {
-            if(grille[ligne][colonne+1]==Void)
-            {
-                grille[ligne][colonne]=Void;
-                colonne++;
-                grille[ligne][colonne]=Awake;
-            }
-            else if(grille[ligne][colonne+1]==Ice)
-            {
-           //    grille[ligne][colonne-1]=Void;
-             //   grille[ligne][colonne] =  Awake;
-                grille[ligne][colonne+1] =  Void;
-                exit=true;
-            }
-            else if(grille[ligne][colonne+1]==Wall)
-            {
-               // grille[ligne][colonne-1]=Void;
-                //grille[ligne][colonne] =  Awake;
-                exit=true;
-            }
-            else
-            {
-                exit=true;
-            }
-        }
-        if(ligne+1>=TAILLE_COLONNE)
-        {
-            alive=false;
-        }
     }
     return alive;
 }
