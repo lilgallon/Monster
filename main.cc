@@ -112,6 +112,8 @@ int main()
     int lvl = 1;
 
 
+    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wall,ice,awake,sleep);
+
     while (!quit){
         switch(Etat_Jeu){
             case Menu:
@@ -148,7 +150,6 @@ int main()
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wall,ice,awake,sleep);
             //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
 
@@ -198,9 +199,9 @@ int main()
                 }
                 init = true;
 
+            SDL_Flip(screen);
 
 
-              SDL_Flip(screen);
             }
 
 
