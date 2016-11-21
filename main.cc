@@ -29,9 +29,7 @@ int main()
 {
     int Etat_Jeu=Menu;
     bool quit = false;
-    int dir;
-
-    bool init = false;
+    int dir = Null;
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -131,7 +129,7 @@ int main()
 
                 if(overCircle(BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON)){
                     applySurface(0,0,fondAccueil2,screen,NULL);
-                    if(event.type==SDL_MOUSEBUTTONDOWN){
+                    if(event.type==SDL_MOUSEBUTTONUP){
                         Etat_Jeu=Jeu;
                     }
                 }else{
@@ -184,9 +182,9 @@ int main()
                     cout << dir << endl;
                 }
 
-                if (dir != Null && init){
-                    affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
-                    cout << "*********" << endl;
+                if (dir != Null){
+                    //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
+                    //cout << "*********" << endl;
                     if(!monsterMovement(grille,dir,awake[0].ligne,awake[0].colonne)){
                         cout << "Lose" << endl;
                         quit = true;
@@ -194,10 +192,9 @@ int main()
                         cout << "Win" << endl;
                         quit = true;
                     }
-                    affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
+                    //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
 
                 }
-                init = true;
 
             SDL_Flip(screen);
 
@@ -208,6 +205,14 @@ int main()
             break;
         }
     }
+    SDL_FreeSurface(screen);
+    SDL_FreeSurface(imgMur);
+    SDL_FreeSurface(imgIce);
+    SDL_FreeSurface(imgAwake);
+    SDL_FreeSurface(imgSleep);
+    SDL_FreeSurface(fondAccueil1);
+    SDL_FreeSurface(fondAccueil2);
+    SDL_FreeSurface(fondJeu);
 
     return 0;
 }
