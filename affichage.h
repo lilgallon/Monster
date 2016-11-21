@@ -11,6 +11,10 @@
 #include "level.h"
 
 
+struct offset{
+    int xOffset;
+    int yOffset;
+};
 
 
 /*********************************
@@ -29,6 +33,12 @@ void affichageTerminal(grilleLevel grille, int tailleL,int tailleC);
 // autre
 bool overCircle(int circleX, int circleY, int circleR);
 
+void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff,
+              int coefx, int coefy,
+              SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
+              SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
+              grilleLevel grille);
 
+bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault);
 
 #endif

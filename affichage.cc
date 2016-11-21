@@ -29,9 +29,7 @@ using namespace std;
 *********************** Sorties *****************************
 * Retourne l'image chargée                                  *
 ************************************************************/
-SDL_Surface *
-loadImage( string filename )
-{
+SDL_Surface *loadImage( string filename ){
     SDL_Surface* loadedImage = NULL;
     SDL_Surface* optimizedImage = NULL;
 
@@ -153,5 +151,48 @@ bool overCircle(int circleX, int circleY, int circleR){
     }else{
         return false;
     }
+
+}
+
+
+
+/****************** Nom de la fonction **********************
+* showGrid                                                  *
+******************** Auteur , Dates *************************
+* Lilian GALLON  20/11/16                                   *
+********************* Description ***************************
+* Permet d'afficher la grille avec les images               *
+*********************** Entrées *****************************
+* Les images, le décalages des images, le clip de chaque    *
+* image, et la grilleLevel                                  *
+*********************** Sorties *****************************
+* -                                                          *
+* ***********************************************************/
+
+void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff,
+              int coefx, int coefy,
+              SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
+              SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
+              grilleLevel grille){
+
+
+    for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
+        for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
+            if(grille[ligne][colonne]==Wall){
+                applySurface(colonne*coefy+wallOff.yOffset,ligne*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
+            }else if(grille[ligne][colonne]==Ice){
+                applySurface(colonne*coefy+initialOff.yOffset,ligne*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
+            }else if(grille[ligne][colonne]==Sleep){
+                applySurface(colonne*coefy+sleepOff.yOffset,ligne*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
+            }else if(grille[ligne][colonne]==Awake){
+                applySurface(colonne*coefy+initialOff.yOffset,ligne*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
+            }
+
+        }
+    }
+}
+
+
+bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault){
 
 }

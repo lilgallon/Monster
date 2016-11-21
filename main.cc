@@ -37,7 +37,7 @@ int main()
     SDL_Surface *fondJeu;
     SDL_Surface *screen;
 
-    SDL_Surface *imgMur;
+    SDL_Surface *imgWall;
     SDL_Surface *imgIce;
     SDL_Surface *imgAwake;
     SDL_Surface *imgSleep;
@@ -48,10 +48,25 @@ int main()
     coord mouseDownReleased;
     coord swipe;
 
-        objectTab wall;
-        objectTab ice;
-        objectTab awake;
-        objectTab sleep;
+    offset initialOff;
+    initialOff.xOffset = 33;
+    initialOff.yOffset = 16;
+
+    offset sleepOff;
+    sleepOff.xOffset = 23;
+    sleepOff.yOffset = 8;
+
+    offset wallOff;
+    wallOff.xOffset = 25;
+    wallOff.yOffset = 9;
+
+    offset iceOff;
+    offset awakeOff;
+
+    objectTab sleepTab;
+    objectTab awakeTab;
+    objectTab wallTab;
+    objectTab iceTab;
 
     screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
     fondAccueil1=loadImage("menu.bmp");
@@ -59,7 +74,7 @@ int main()
 
     fondJeu=loadImage("background.bmp");
 
-    imgMur = loadImageWithColorKey("sprite.bmp",255,255,255);
+    imgWall = loadImageWithColorKey("sprite.bmp",255,255,255);
     imgIce = loadImageWithColorKey("sprite.bmp",255,255,255);
     imgAwake = loadImageWithColorKey("sprite.bmp",255,255,255);
     imgSleep = loadImageWithColorKey("sprite.bmp",255,255,255);
@@ -68,14 +83,14 @@ int main()
     // Décalage initial y: -40
     // Dimensions d'une case: x:60 , y: 50
     // Décalage entre chaque ligne : y: 3
-        int decaly = 16;
-        int decalx = 33;
+//        int decaly = 16;
+//        int decalx = 33;
 
-        int decalySleep = 8;
-        int decalxSleep = 23;
+//        int decalySleep = 8;
+//        int decalxSleep = 23;
 
-        int decalyWall = 9;
-        int decalxWall = 25;
+//        int decalyWall = 9;
+//        int decalxWall = 25;
 
         int coefy = 60;
         int coefx = 52;
@@ -110,7 +125,7 @@ int main()
     int lvl = 1;
 
 
-    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wall,ice,awake,sleep);
+    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wallTab,iceTab,awakeTab,sleepTab);
 
     while (!quit){
         switch(Etat_Jeu){
@@ -140,73 +155,33 @@ int main()
 
             break;
 
-
-
-
-
              case Jeu:
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
-
-
             while(SDL_PollEvent(&eventM)){
                 if(eventM.type==SDL_QUIT){
                     quit=true;
-                }
-
-
-
-                // Affichage
-                for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
-                    for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
-                        if(grille[ligne][colonne]==Wall){
-                            applySurface(colonne*coefy+decalyWall,ligne*coefx+decalxWall,imgMur,screen,&clipWall);
-                        }else if(grille[ligne][colonne]==Ice){
-                            applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgIce,screen,&clipIce);
-                        }else if(grille[ligne][colonne]==Sleep){
-                            applySurface(colonne*coefy+decalySleep,ligne*coefx+decalxSleep,imgSleep,screen,&clipSleep);
-                        }else if(grille[ligne][colonne]==Awake){
-                            applySurface(colonne*coefy+decaly,ligne*coefx+decalx,imgAwake,screen,&clipAwake);
-                        }
-
-                    }
-                }
-                // Fin affichage
-
-
-                dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-                if (dir != Null)
-                {
-                    cout << dir << endl;
-                }
-
-                if (dir != Null){
-                    //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
-                    //cout << "*********" << endl;
-                    if(!monsterMovement(grille,dir,awake[0].ligne,awake[0].colonne)){
-                        cout << "Lose" << endl;
-                        quit = true;
-                    }else if(sleep[0].nb==0){
-                        cout << "Win" << endl;
-                        quit = true;
-                    }
-                    //affichageTerminal(grille,TAILLE_LIGNE,TAILLE_COLONNE);
-
-                }
-
-            SDL_Flip(screen);
-
-
             }
-
-
+            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille);
+            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
+            if (dir != Null){
+                if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
+                    cout << "Lose" << endl;
+                    quit = true;
+                }else if(sleepTab[0].nb==0){
+                    cout << "Win" << endl;
+                    quit = true;
+                }
+            }
+            SDL_Flip(screen);
+            }
             break;
         }
     }
+
     SDL_FreeSurface(screen);
-    SDL_FreeSurface(imgMur);
+    SDL_FreeSurface(imgWall);
     SDL_FreeSurface(imgIce);
     SDL_FreeSurface(imgAwake);
     SDL_FreeSurface(imgSleep);
