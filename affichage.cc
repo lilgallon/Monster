@@ -192,6 +192,23 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
     }
 }
 
+
+/****************** Nom de la fonction **********************
+* dynamicButton                                             *
+******************** Auteur , Dates *************************
+* Lilian GALLON  22/11/16                                   *
+********************* Description ***************************
+* Affiche une image de bouton différente lorsque le curseur *
+* n'est pas dessus, et une autre si il est dessus.          *
+*********************** Entrées *****************************
+* Coordonnées en x et y où afficher l'image, l'image si le  *
+* curseur est sur le bouton. Coodonnées en x et y où afficher
+* l'image si le curseur n'est pas sur le bouton. Coordonnées*
+* en x et y du milieu du bouton ainsi que son milieu. Le clip
+* des deux images, et une variable évenement                *
+*********************** Sorties *****************************
+* Retourne vrai si le curseur est sur le bouton             *
+************************************************************/
 bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *screen,
                    int xButton, int yButton, int rButton,
                    int xOverDisplay, int yOverDisplay,
@@ -200,7 +217,6 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
                    SDL_Event event){
 
     if(overCircle(xButton,yButton,rButton)){
-        cout << "sur bouton" << endl;
         applySurface(xOverDisplay,yOverDisplay,imgOver,screen,overClip);
         if(event.type==SDL_MOUSEBUTTONUP){
             return true;
@@ -208,7 +224,6 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
             return false;
         }
     }else{
-        cout << "a cote " << endl;
         applySurface(xDefaultDisplay,yDefaultDisplay,imgDefault,screen,defaultClip);
         return false;
     }

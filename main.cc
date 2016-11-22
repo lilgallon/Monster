@@ -109,7 +109,6 @@ int main()
     int Etat_Jeu=Menu;
     bool quit = false;
     int dir = Null;
-    bool clic = false;
 
 
 
@@ -125,7 +124,6 @@ int main()
                 if(event.type==SDL_QUIT){
                     quit=true;
                 }
-
                 if(dynamicButton(fondAccueil2,fondAccueil1,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON,0,0,0,0,NULL,NULL,event)){
                     Etat_Jeu=Play;
                 }
@@ -135,6 +133,9 @@ int main()
             break;
 
         case Play:
+
+            // Bug du lag:
+            // L'affichage du monstre n'est pas update tant que le joueur n'a pas bougé la souris
 
             applySurface(0,0,fondJeu,screen,NULL);
 
