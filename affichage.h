@@ -39,6 +39,11 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
               grilleLevel grille);
 
-bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault);
+bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *screen,
+                   int xButton, int yButton, int rButton,
+                   int xOverDisplay, int yOverDisplay,
+                   int xDefaultDisplay, int yDefaultDisplay,
+                   SDL_Rect *overClip, SDL_Rect *defaultClip,
+                   SDL_Event event);
 
 #endif

@@ -192,7 +192,24 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
     }
 }
 
+bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *screen,
+                   int xButton, int yButton, int rButton,
+                   int xOverDisplay, int yOverDisplay,
+                   int xDefaultDisplay, int yDefaultDisplay,
+                   SDL_Rect *overClip, SDL_Rect *defaultClip,
+                   SDL_Event event){
 
-bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault){
-
+    if(overCircle(xButton,yButton,rButton)){
+        cout << "sur bouton" << endl;
+        applySurface(xOverDisplay,yOverDisplay,imgOver,screen,overClip);
+        if(event.type==SDL_MOUSEBUTTONUP){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        cout << "a cote " << endl;
+        applySurface(xDefaultDisplay,yDefaultDisplay,imgDefault,screen,defaultClip);
+        return false;
+    }
 }
