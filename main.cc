@@ -8,7 +8,6 @@
 #include <array>
 
 #include "level.h"
-#include "monster.h"
 #include "affichage.h"
 #include "deplacement.h"
 
@@ -114,61 +113,60 @@ int main()
 
     while (!quit){
 
+        SDL_Flip(screen);
+
         switch(Etat_Jeu){
         case Menu:
 
-            SDL_Flip(screen);
 
-            while(SDL_PollEvent(&event))
-            {
-                if(event.type==SDL_QUIT){
-                    quit=true;
-                }
-                if(dynamicButton(fondAccueil2,fondAccueil1,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON,0,0,0,0,NULL,NULL,event)){
-                    Etat_Jeu=Play;
-                }
+
+            SDL_PollEvent(&event);
+
+            if(event.type==SDL_QUIT){
+                quit=true;
             }
+            if(dynamicButton(fondAccueil2,fondAccueil1,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON,0,0,0,0,NULL,NULL,event)){
+                Etat_Jeu=Play;
+            }
+
 
 
             break;
 
         case Play:
 
-            // Bug du lag:
-            // L'affichage du monstre n'est pas update tant que le joueur n'a pas bougé la souris
-
             applySurface(0,0,fondJeu,screen,NULL);
+            SDL_PollEvent(&eventM);
 
-            while(SDL_PollEvent(&eventM)){
-                if(eventM.type==SDL_QUIT){
-                    quit=true;
-                }
-                showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille);
-                dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-                if (dir != Null){
-                    if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
-                        cout << "Lose" << endl;
-                        quit = true;
-                    }else if(sleepTab[0].nb==0){
-                        cout << "Win" << endl;
-                        quit = true;
-                    }
-                }
-                SDL_Flip(screen);
+            if(eventM.type==SDL_QUIT){
+                quit=true;
             }
-            break;
-        }
+
+            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille);
+            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
+            if (dir != Null){
+                if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
+                    cout << "Lose" << endl;
+                    quit = true;
+                }else if(sleepTab[0].nb==0){
+                    cout << "Win" << endl;
+                    quit = true;
+                }
+            }
+
+        break;
     }
+}
 
-    SDL_FreeSurface(screen);
-    SDL_FreeSurface(imgWall);
-    SDL_FreeSurface(imgIce);
-    SDL_FreeSurface(imgAwake);
-    SDL_FreeSurface(imgSleep);
-    SDL_FreeSurface(fondAccueil1);
-    SDL_FreeSurface(fondAccueil2);
-    SDL_FreeSurface(fondJeu);
+SDL_FreeSurface(screen);
+SDL_FreeSurface(imgWall);
+SDL_FreeSurface(imgIce);
+SDL_FreeSurface(imgAwake);
+SDL_FreeSurface(imgSleep);
+SDL_FreeSurface(fondAccueil1);
+SDL_FreeSurface(fondAccueil2);
+SDL_FreeSurface(fondJeu);
 
-    return 0;
+return 0;
 }
 

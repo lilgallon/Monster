@@ -9,7 +9,6 @@ INCLUDEPATH+=-I/usr/include/SDL/
 QMAKE_CXXFLAGS += -std=c++11 -pedantic -Wall -Wextra
 SOURCES += \
     level.cc \
-    monster.cc \
     affichage.cc \
     main.cc \
     deplacement.cpp
@@ -19,7 +18,6 @@ qtcAddDeployment()
 
 HEADERS += \
     level.h \
-    monster.h \
     affichage.h \
     deplacement.h
 

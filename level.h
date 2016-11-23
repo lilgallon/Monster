@@ -2,7 +2,6 @@
 #define _LEVEL_H_
 
 #include <iostream>
-#include "monster.h"
 #include "array"
 
 
