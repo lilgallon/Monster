@@ -93,11 +93,10 @@ int main()
      * Initialisations liées à la grille et au lvl
      * ************************************/
 
-    int lvl = 1; // Démarre su le niveau 1 au début
-    objectTab sleepTab, awakeTab, wallTab, iceTab;
-    grilleLevel grille;
-    initLevel(lvl,grille,TAILLE_COLONNE,TAILLE_LIGNE,wallTab,iceTab,awakeTab,sleepTab);
-
+    // Version 3
+    int lvl = 1;
+    level grille2;
+    initLevel2(lvl,grille2);
 
     /****************************************
      * Autres initialisations
@@ -118,8 +117,6 @@ int main()
         switch(Etat_Jeu){
         case Menu:
 
-
-
             SDL_PollEvent(&event);
 
             if(event.type==SDL_QUIT){
@@ -128,8 +125,6 @@ int main()
             if(dynamicButton(fondAccueil2,fondAccueil1,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON,0,0,0,0,NULL,NULL,event)){
                 Etat_Jeu=Play;
             }
-
-
 
             break;
 
@@ -142,17 +137,24 @@ int main()
                 quit=true;
             }
 
-            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille);
-            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-            if (dir != Null){
-                if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
-                    cout << "Lose" << endl;
-                    quit = true;
-                }else if(sleepTab[0].nb==0){
-                    cout << "Win" << endl;
-                    quit = true;
-                }
-            }
+            // Version 3
+
+            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille2);
+
+
+//            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
+//            if (dir != Null){
+//                if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
+//                    //cout << "Lose" << endl;
+//                    quit = true;
+//                    dir = Null;
+//                }else if(sleepTab[0].nb==0){
+//                    //cout << "Win" << endl;
+//                    quit = true;
+//                    dir = Null;
+//                }
+
+//            }
 
         break;
     }

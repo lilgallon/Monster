@@ -93,6 +93,103 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 
 
 /****************** Nom de la fonction **********************
+* columnMvtt                                                *
+******************** Auteur , Dates *************************
+* Lilian GALLON, 05/12/16                                   *
+********************* Description ***************************
+* Calcule les coordonnées d'arrivée du déplacement du       *
+*  monstre                                                  *
+*********************** Entrées *****************************
+* La structure level, la direction choisie,                 *
+* d'id du monstre à déplacer                                *
+*********************** Sorties *****************************
+* Les coordonnées d'arrivée du monstre                      *
+*************************************************************/
+
+coord columnMvt(level grille,int monsterId, int dir){
+
+    coord monstre;
+    monstre.y=grille.tabMonster[monsterId].y    +1;
+    monstre.x=grille.tabMonster[monsterId].x  +1;
+    bool exit = false;
+    int ligneCoef;
+    int colonneCoef;
+
+    // Faire des if pour trouver les coef selon dir
+     if(dir==Up){ligneCoef = 1; colonneCoef=0;}
+     else if(dir==Down){ligneCoef = -1; colonneCoef=0;}
+     else if(dir==Left){ligneCoef=0; colonneCoef=-1;}
+     else if(dir==Right){ligneCoef=0; colonneCoef=1;}
+
+
+    while(monstre.y+ligneCoef<TAILLE_LIGNE && monstre.y-ligneCoef>0 && monstre.x+colonneCoef>TAILLE_COLONNE && monstre.x-colonneCoef>0 && !exit){
+
+    // On vérifie si il ya un monstre sur le passage
+    for(int i=0;i<grille.nbMonster;i++){
+        if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
+            if(grille.tabMonster[i].x==monstre.x || grille.tabMonster[i].y==monstre.y){
+                // On détecte qu'il y a un monstre réveillé juste à côté en x (colonne)
+                monstre.y = monstre.y - ligneCoef;
+                monstre.x = monstre.x - colonneCoef;
+                exit = true;
+            }else{
+                monstre.y = monstre.y + ligneCoef;
+                monstre.x = monstre.x + colonneCoef;
+            }
+        }
+        if(grille.tabMonster[i].type==SLEEPING && monsterId!=i){
+            if(grille.tabMonster[i].x==monstre.x || grille.tabMonster[i].y==monstre.y){
+                // On détecte qu'il y a un monstre endormi juste à côté en x (colonne)
+                // ON met donc un monstre réveillé
+                // grille.tabMonster[i].type=STANDARD;
+                monstre.y = monstre.y - ligneCoef;
+                monstre.x = monstre.x - colonneCoef;
+                exit = true;
+            }else{
+                monstre.y = monstre.y + ligneCoef;
+                monstre.x = monstre.x + colonneCoef;
+            }
+        }
+    }
+
+    // On vérifie si il y a un mur sur le passage
+    for(int i=0;i<grille.nbWall;i++){
+        if(monsterId!=i){
+            if(grille.tabWall[i].x==monstre.x || grille.tabWall[i].y==monstre.y){
+                // On détecte qu'il y a un monstre juste à côté en x (colonne)
+                monstre.y = monstre.y - ligneCoef;
+                monstre.x = monstre.x - colonneCoef;
+                exit = true;
+            }else{
+                monstre.y = monstre.y + ligneCoef;
+                monstre.x = monstre.x + colonneCoef;
+            }
+        }
+    }
+
+    for(int i=0;i<grille.nbIce;i++){
+        if(monsterId!=i){
+            if(grille.tabIce[i].x==monstre.x || grille.tabIce[i].y==monstre.y){
+                // On détecte qu'il y a un monstre juste à côté en x (colonne)
+                monstre.y = monstre.y - ligneCoef;
+                monstre.x = monstre.x - colonneCoef;
+                // supprimer la glace
+                exit = true;
+            }else{
+                monstre.y = monstre.y + ligneCoef;
+                monstre.x = monstre.x + colonneCoef;
+            }
+        }
+    }
+
+    }
+
+    return monstre;
+
+}
+
+
+/****************** Nom de la fonction **********************
 * monsterMovement                                           *
 ******************** Auteur , Dates *************************
 * Tristan RENAUDON, 09/11/16                                *
@@ -103,8 +200,9 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 * du monstre                                                *
 *********************** Sorties *****************************
 * Le tableau modifié, si le joueur est en vie               *
-************************************************************/
-bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
+*************************************************************/
+/*
+bool monsterMovement(grilleLevel &grille, int &dir, int &ligne, int &colonne)
 {
     bool exit=false;
     bool alive=true;
@@ -131,7 +229,7 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
         j=0;
     }
 
-    if(dir!=Null && ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<=TAILLE_COLONNE)
+    if(dir!=Null && ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<=TAILLE_COLONNE && !exit)
     {
        while(ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<TAILLE_COLONNE && !exit)
        {
@@ -147,8 +245,7 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
            else if(grille[ligne+j][colonne+i]==Ice)
            {
                cout << "ice" << endl;
-
-               grille[ligne+j][colonne+i] =  Void;
+               grille[ligne+j][colonne+i]=Void;
                exit=true;
            }
            else if(grille[ligne+j][colonne+i]==Sleep)
@@ -170,6 +267,8 @@ bool monsterMovement(grilleLevel &grille, int dir, int &ligne, int &colonne)
        {
            alive=false;
        }
+       dir = Null;
     }
     return alive;
 }
+*/

@@ -4,36 +4,29 @@
 #include <iostream>
 #include "array"
 
-
-// Pour les fleches: dirige vers GAUCHE,DROIT,BAS, ou HAUT
-//const int GAUCHE=4;
-//const int DROITE=6;
-//const int BAS=2;
-//const int HAUT=8;
-
-const int NB_MAX_MONSTER = 45;
-
-enum {Void,Wall,Ice,Awake,Sleep};
+const int NB_MAX_OBJECT = 45;
 
 const int TAILLE_LIGNE = 9;
 const int TAILLE_COLONNE = 5;
 
-//const int Wall = 1;
-//const int Ice = 2;
-//const int Awake = 3;
-//const int Sleep = 4;
+enum {STANDARD,SLEEPING,DEAD,WALL,ICE};
 
-struct objet{
-    int ligne;
-    int colonne;
-    int nb;
+struct object{
+    int type;
+    int x;
+    int y;
 };
 
-using grilleLevel = std::array<std::array<int,TAILLE_COLONNE>,TAILLE_LIGNE>;
-using objectTab = std::array<objet,NB_MAX_MONSTER>;
 
-////Définition des prototypes de fonctions
-void initLevel(int lvl, grilleLevel &grille, int taille_colonne, int taille_ligne, objectTab &wallTab, objectTab &iceTab, objectTab &awakeTab, objectTab &sleepTab);
-void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne);
+struct level{
+    std::array<object,NB_MAX_OBJECT> tabMonster;
+    int nbMonster;
+    std::array<object,NB_MAX_OBJECT> tabWall;
+    int nbWall;
+    std::array<object,NB_MAX_OBJECT> tabIce;
+    int nbIce;
+};
+
+void initLevel2(int lvl, level & grille);
 
 #endif

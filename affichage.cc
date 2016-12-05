@@ -110,17 +110,6 @@ loadImageWithColorKey(string filename, int r, int g, int b)
 
 }
 
-// Affichage terminal test
-
-void affichageTerminal(grilleLevel grille, int tailleL,int tailleC){
-    for (int ligne =0; ligne < tailleL; ligne++) {
-        for (int colonne =0; colonne < tailleC; colonne++) {
-            cout << grille[ligne][colonne] << " ";
-        }
-        cout << endl;
-    }
-}
-
 /****************** Nom de la fonction **********************
 * overCircle                                                *
 ******************** Auteur , Dates *************************
@@ -173,22 +162,20 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
               int coefx, int coefy,
               SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
-              grilleLevel grille){
+              level grille){
 
-
-    for (int ligne =0; ligne < TAILLE_LIGNE; ligne ++) {
-        for (int colonne =0; colonne < TAILLE_COLONNE; colonne ++) {
-            if(grille[ligne][colonne]==Wall){
-                applySurface(colonne*coefy+wallOff.yOffset,ligne*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
-            }else if(grille[ligne][colonne]==Ice){
-                applySurface(colonne*coefy+initialOff.yOffset,ligne*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
-            }else if(grille[ligne][colonne]==Sleep){
-                applySurface(colonne*coefy+sleepOff.yOffset,ligne*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
-            }else if(grille[ligne][colonne]==Awake){
-                applySurface(colonne*coefy+initialOff.yOffset,ligne*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
-            }
-
+    for(int i=0; i<grille.nbMonster ; i ++){
+        if(grille.tabMonster[i].type==SLEEPING){
+            applySurface(grille.tabMonster[i].y*coefy+sleepOff.yOffset,grille.tabMonster[i].x*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
+        }else if (grille.tabMonster[i].type==STANDARD){
+            applySurface(grille.tabMonster[i].y*coefy+initialOff.yOffset,grille.tabMonster[i].x*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
         }
+    }
+    for(int i=0; i<grille.nbIce ; i++){
+        applySurface(grille.tabIce[i].y*coefy+initialOff.yOffset,grille.tabIce[i].x*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
+    }
+    for(int i=0; i<grille.nbWall; i++){
+        applySurface(grille.tabWall[i].y*coefy+wallOff.yOffset,grille.tabWall[i].x*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
     }
 }
 

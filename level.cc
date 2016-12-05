@@ -8,77 +8,50 @@ using namespace std;
 ******************** Auteur , Dates *************************
 * Lilian GALLON, 09/11/16                                   *
 ********************* Description ***************************
-* Initialise la grille en mettant des 0 partout             *
+* Initialise la "grille" selon le niveau                    *
 *********************** Entrées *****************************
-* La grille, la taille en colonne et la taille en ligne     *
+* La grille, et le niveau                                   *
 *********************** Sorties *****************************
 * -                                                         *
 ************************************************************/
-void initTabLevel(grilleLevel & grille, int taille_colonne, int taille_ligne){
 
-    for (int ligne =0; ligne < taille_ligne; ligne++) {
-       for (int colonne =0; colonne < taille_colonne; colonne++) {
-          grille[ligne][colonne] = Void;
-       }
-    }
-}
-
-
-
-/****************** Nom de la fonction **********************
-* initTabLevel                                              *
-******************** Auteur , Dates *************************
-* Lilian GALLON, 09/11/16                                   *
-********************* Description ***************************
-* Initialise la grille selon le niveau                      *
-*********************** Entrées *****************************
-* La grille, la taille en colonne et en ligne, et le niveau *
-*********************** Sorties *****************************
-* -                                                         *
-************************************************************/
-//// Fonctions
-void initLevel(int lvl, grilleLevel & grille, int taille_colonne, int taille_ligne, objectTab &wallTab, objectTab &iceTab, objectTab &awakeTab, objectTab &sleepTab)
+void initLevel2(int lvl, level & grille)
 {
 
-    initTabLevel(grille,taille_colonne,taille_ligne);
-
-//    objectTab wall;
-//    objectTab ice;
-//    objectTab awake;
-//    objectTab sleep;
+    //initTabLevel1(grille,taille_colonne,taille_ligne);
 
     // Initialise les positions des objets
     switch(lvl){
     case 1 :
         // grille[ligne][colonne]
         // Wall
-        wallTab[0].ligne=2; wallTab[0].colonne = 3; wallTab[0].nb=1;
+        grille.tabWall[0].x=2;
+        grille.tabWall[0].y=3;
+        grille.nbWall=1;
         // Ice
-        iceTab[0].ligne = 7; iceTab[0].colonne = 0; iceTab[0].nb=1;
+        grille.tabIce[0].x=7;
+        grille.tabIce[0].y=0;
+        grille.nbIce=1;
         // Awake monster
-        awakeTab[0].ligne = 5; awakeTab[0].colonne =3; awakeTab[0].nb=1;
+        grille.tabMonster[0].x=5;
+        grille.tabMonster[0].y=3;
+        grille.tabMonster[0].type=STANDARD;
         // Sleeping monster
-        sleepTab[0].ligne=3; sleepTab[0].colonne=0; sleepTab[0].nb=2;
-        sleepTab[1].ligne=6; sleepTab[1].colonne=4;
+        grille.tabMonster[1].x=3;
+        grille.tabMonster[1].y=0;
+        grille.tabMonster[1].type=SLEEPING;
+
+        grille.tabMonster[2].x=6;
+        grille.tabMonster[2].y=1;
+        grille.tabMonster[2].type=SLEEPING;
+
+        grille.nbMonster=3;
 
         break;
     }
 
-    // Met les objets dans la grille
-    for (int i =0; i < wallTab[0].nb ; i++){
-        grille[wallTab[i].ligne][wallTab[i].colonne]=Wall;
-    }
-    for (int i =0; i < iceTab[0].nb ; i++){
-        grille[iceTab[i].ligne][iceTab[i].colonne]=Ice;
-    }
-    for (int i =0; i < awakeTab[0].nb ; i++){
-        grille[awakeTab[i].ligne][awakeTab[i].colonne]=Awake;
-    }
-    for (int i =0; i < sleepTab[0].nb ; i++){
-        grille[sleepTab[i].ligne][sleepTab[i].colonne]=Sleep;
-    }
-
 }
+
 
 
 
