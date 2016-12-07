@@ -6,13 +6,19 @@
 int absoluteValue(int val);
 
 struct coord{
-    int x=0;
-    int y=0;
+    int x;
+    int y;
+};
+
+struct coord2{
+    int l;
+    int c;
 };
 
 enum {Null, Left, Right, Up, Down};
 
 int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
+void updateLevel(level &grille,int monsterId, int dir);
 
 
 #endif // DEPLACEMENT_H

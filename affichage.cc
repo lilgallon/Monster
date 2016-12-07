@@ -166,16 +166,16 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
 
     for(int i=0; i<grille.nbMonster ; i ++){
         if(grille.tabMonster[i].type==SLEEPING){
-            applySurface(grille.tabMonster[i].y*coefy+sleepOff.yOffset,grille.tabMonster[i].x*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
+            applySurface(grille.tabMonster[i].c*coefy+sleepOff.yOffset,grille.tabMonster[i].l*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
         }else if (grille.tabMonster[i].type==STANDARD){
-            applySurface(grille.tabMonster[i].y*coefy+initialOff.yOffset,grille.tabMonster[i].x*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
+            applySurface(grille.tabMonster[i].c*coefy+initialOff.yOffset,grille.tabMonster[i].l*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
         }
     }
     for(int i=0; i<grille.nbIce ; i++){
-        applySurface(grille.tabIce[i].y*coefy+initialOff.yOffset,grille.tabIce[i].x*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
+        applySurface(grille.tabIce[i].c*coefy+initialOff.yOffset,grille.tabIce[i].l*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
     }
     for(int i=0; i<grille.nbWall; i++){
-        applySurface(grille.tabWall[i].y*coefy+wallOff.yOffset,grille.tabWall[i].x*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
+        applySurface(grille.tabWall[i].c*coefy+wallOff.yOffset,grille.tabWall[i].l*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
     }
 }
 

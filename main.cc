@@ -107,6 +107,8 @@ int main()
     int Etat_Jeu=Menu;
     bool quit = false;
     int dir = Null;
+    int i =0;
+
 
 
 
@@ -131,7 +133,7 @@ int main()
         case Play:
 
             applySurface(0,0,fondJeu,screen,NULL);
-            SDL_PollEvent(&eventM);
+            SDL_WaitEvent(&eventM);
 
             if(eventM.type==SDL_QUIT){
                 quit=true;
@@ -142,19 +144,18 @@ int main()
             showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille2);
 
 
-//            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-//            if (dir != Null){
-//                if(!monsterMovement(grille,dir,awakeTab[0].ligne,awakeTab[0].colonne)){
-//                    //cout << "Lose" << endl;
-//                    quit = true;
-//                    dir = Null;
-//                }else if(sleepTab[0].nb==0){
-//                    //cout << "Win" << endl;
-//                    quit = true;
-//                    dir = Null;
-//                }
+            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
+            if (dir != Null){
+                i++;
+                cout  << i << endl;
+                updateLevel(grille2,0,dir);
+            }
 
-//            }
+            if(grille2.nbMonsterSleeping==0){
+                cout << "Vous avez gagné" << endl;
+                cout << "Avec " << i << " coups." << endl;
+            }
+
 
         break;
     }

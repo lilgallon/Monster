@@ -42,60 +42,60 @@ int absoluteValue(int val)
 ************************************************************/
 int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe)
 {
-        if (eventM.type == SDL_MOUSEBUTTONDOWN)
+    if (eventM.type == SDL_MOUSEBUTTONDOWN)
+    {
+        mouseDown.x=eventM.button.x;
+        mouseDown.y=eventM.button.y;
+    }
+    else if (eventM.type == SDL_MOUSEBUTTONUP)
+    {
+        if (eventM.button.button==SDL_BUTTON_LEFT)
         {
-            mouseDown.x=eventM.button.x;
-            mouseDown.y=eventM.button.y;
-        }
-        else if (eventM.type == SDL_MOUSEBUTTONUP)
-        {
-            if (eventM.button.button==SDL_BUTTON_LEFT)
+            mouseDownReleased.x=eventM.button.x-mouseDown.x;
+            mouseDownReleased.y=eventM.button.y-mouseDown.y;
+
+            swipe.x=absoluteValue(mouseDownReleased.x);
+            swipe.y=absoluteValue(mouseDownReleased.y);
+
+            // Droite
+            if (mouseDownReleased.x>0 && swipe.x>swipe.y)
             {
-                mouseDownReleased.x=eventM.button.x-mouseDown.x;
-                mouseDownReleased.y=eventM.button.y-mouseDown.y;
+                mouseDownReleased.x=0;
+                return Right;
+            }
 
-                swipe.x=absoluteValue(mouseDownReleased.x);
-                swipe.y=absoluteValue(mouseDownReleased.y);
+            // Gauche
+            else if (mouseDownReleased.x<0 && swipe.x>swipe.y)
+            {
+                mouseDownReleased.x=0;
+                return Left;
+            }
 
-                // Droite
-                if (mouseDownReleased.x>0 && swipe.x>swipe.y)
-                {
-                    mouseDownReleased.x=0;
-                    return Right;
-                }
+            // Bas
+            else if (mouseDownReleased.y>0 && swipe.y>swipe.x)
+            {
+                mouseDownReleased.y=0;
+                return Down;
+            }
 
-                // Gauche
-                else if (mouseDownReleased.x<0 && swipe.x>swipe.y)
-                {
-                    mouseDownReleased.x=0;
-                    return Left;
-                }
-
-                // Bas
-                else if (mouseDownReleased.y>0 && swipe.y>swipe.x)
-                {
-                    mouseDownReleased.y=0;
-                    return Down;
-                }
-
-                // Haut
-                else if (mouseDownReleased.y<0 && swipe.y>swipe.x)
-                {
-                    mouseDownReleased.y=0;
-                    return Up;
-                }
-
+            // Haut
+            else if (mouseDownReleased.y<0 && swipe.y>swipe.x)
+            {
+                mouseDownReleased.y=0;
+                return Up;
             }
 
         }
-        return Null;
+
+    }
+    return Null;
 }
 
 
 /****************** Nom de la fonction **********************
-* columnMvtt                                                *
+* columnMvt                                                 *
 ******************** Auteur , Dates *************************
-* Lilian GALLON, 05/12/16                                   *
+* Lilian GALLON & Tristan Renaudon, 07/12/16                *
 ********************* Description ***************************
 * Calcule les coordonnées d'arrivée du déplacement du       *
 *  monstre                                                  *
@@ -106,85 +106,78 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 * Les coordonnées d'arrivée du monstre                      *
 *************************************************************/
 
-coord columnMvt(level grille,int monsterId, int dir){
+void updateLevel(level &grille,int monsterId, int dir){
 
-    coord monstre;
-    monstre.y=grille.tabMonster[monsterId].y    +1;
-    monstre.x=grille.tabMonster[monsterId].x  +1;
+    coord2 monstre;
+    monstre.l=grille.tabMonster[monsterId].l;
+    monstre.c=grille.tabMonster[monsterId].c;
     bool exit = false;
     int ligneCoef;
     int colonneCoef;
 
     // Faire des if pour trouver les coef selon dir
-     if(dir==Up){ligneCoef = 1; colonneCoef=0;}
-     else if(dir==Down){ligneCoef = -1; colonneCoef=0;}
-     else if(dir==Left){ligneCoef=0; colonneCoef=-1;}
-     else if(dir==Right){ligneCoef=0; colonneCoef=1;}
+    if(dir==Up){ligneCoef = -1; colonneCoef=0;}
+    else if(dir==Down){ligneCoef = 1; colonneCoef=0;}
+    else if(dir==Left){ligneCoef=0; colonneCoef=-1;}
+    else if(dir==Right){ligneCoef=0; colonneCoef=1;}
 
 
-    while(monstre.y+ligneCoef<TAILLE_LIGNE && monstre.y-ligneCoef>0 && monstre.x+colonneCoef>TAILLE_COLONNE && monstre.x-colonneCoef>0 && !exit){
+    while(monstre.l+ligneCoef<TAILLE_LIGNE && monstre.l+ligneCoef>=0
+          && monstre.c+colonneCoef<TAILLE_COLONNE && monstre.c+colonneCoef>=0
+          && !exit){
 
-    // On vérifie si il ya un monstre sur le passage
-    for(int i=0;i<grille.nbMonster;i++){
-        if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
-            if(grille.tabMonster[i].x==monstre.x || grille.tabMonster[i].y==monstre.y){
-                // On détecte qu'il y a un monstre réveillé juste à côté en x (colonne)
-                monstre.y = monstre.y - ligneCoef;
-                monstre.x = monstre.x - colonneCoef;
-                exit = true;
-            }else{
-                monstre.y = monstre.y + ligneCoef;
-                monstre.x = monstre.x + colonneCoef;
+        //pb colonne
+
+        // On vérifie si il ya un monstre sur le passage
+        for(int i=0;i<grille.nbMonster;i++){
+            if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
+                if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
+//                    monstre.c=monstre.c-colonneCoef;
+//                    monstre.l=monstre.l-ligneCoef;
+                    exit = true;
+                }
+            }
+            if(grille.tabMonster[i].type==SLEEPING && monsterId!=i){
+                if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
+                    grille.tabMonster[i].type=STANDARD;
+                    grille.nbMonsterSleeping --;
+//                    monstre.c=monstre.c-colonneCoef;
+//                    monstre.l=monstre.l-ligneCoef;
+                    exit= true;
+                }
             }
         }
-        if(grille.tabMonster[i].type==SLEEPING && monsterId!=i){
-            if(grille.tabMonster[i].x==monstre.x || grille.tabMonster[i].y==monstre.y){
-                // On détecte qu'il y a un monstre endormi juste à côté en x (colonne)
-                // ON met donc un monstre réveillé
-                // grille.tabMonster[i].type=STANDARD;
-                monstre.y = monstre.y - ligneCoef;
-                monstre.x = monstre.x - colonneCoef;
-                exit = true;
-            }else{
-                monstre.y = monstre.y + ligneCoef;
-                monstre.x = monstre.x + colonneCoef;
-            }
-        }
-    }
 
-    // On vérifie si il y a un mur sur le passage
-    for(int i=0;i<grille.nbWall;i++){
-        if(monsterId!=i){
-            if(grille.tabWall[i].x==monstre.x || grille.tabWall[i].y==monstre.y){
+        // On vérifie si il y a un mur sur le passage
+        for(int i=0;i<grille.nbWall;i++){
+            if(grille.tabWall[i].l==monstre.l+ligneCoef && grille.tabWall[i].c==monstre.c+colonneCoef){
                 // On détecte qu'il y a un monstre juste à côté en x (colonne)
-                monstre.y = monstre.y - ligneCoef;
-                monstre.x = monstre.x - colonneCoef;
+//                monstre.c=monstre.c-colonneCoef;
+//                monstre.l=monstre.l-ligneCoef;
                 exit = true;
-            }else{
-                monstre.y = monstre.y + ligneCoef;
-                monstre.x = monstre.x + colonneCoef;
             }
+        }
+
+        for(int i=0;i<grille.nbIce;i++){
+            if(grille.tabIce[i].l==monstre.l+ligneCoef && grille.tabIce[i].
+                    c==monstre.c+colonneCoef){
+                // pour faire zizi dur profs go faire décalage gauche
+                grille.tabIce[i].l=-1;
+                grille.tabIce[i].c=-1;
+                grille.nbIce --;
+//                monstre.c=monstre.c-colonneCoef;
+//                monstre.l=monstre.l-ligneCoef;
+               exit = true;
+            }
+        }
+        if(!exit){
+            monstre.c=monstre.c+colonneCoef;
+            monstre.l=monstre.l+ligneCoef;
         }
     }
 
-    for(int i=0;i<grille.nbIce;i++){
-        if(monsterId!=i){
-            if(grille.tabIce[i].x==monstre.x || grille.tabIce[i].y==monstre.y){
-                // On détecte qu'il y a un monstre juste à côté en x (colonne)
-                monstre.y = monstre.y - ligneCoef;
-                monstre.x = monstre.x - colonneCoef;
-                // supprimer la glace
-                exit = true;
-            }else{
-                monstre.y = monstre.y + ligneCoef;
-                monstre.x = monstre.x + colonneCoef;
-            }
-        }
-    }
-
-    }
-
-    return monstre;
+    grille.tabMonster[monsterId].l=monstre.l;
+    grille.tabMonster[monsterId].c=monstre.c;
 
 }
 
