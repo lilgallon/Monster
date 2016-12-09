@@ -27,7 +27,6 @@ int absoluteValue(int val)
     return val;
 }
 
-
 /****************** Nom de la fonction **********************
 * direction                                                 *
 ******************** Auteur , Dates *************************
@@ -43,11 +42,14 @@ int absoluteValue(int val)
 ************************************************************/
 int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes mouseDownReleased, coordCartesiennes swipe)
 {
-    if (eventM.type == SDL_MOUSEBUTTONDOWN)
-    {
-        mouseDown.x=eventM.button.x;
-        mouseDown.y=eventM.button.y;
+    if (eventM.type == SDL_MOUSEBUTTONDOWN){
+        if (eventM.button.button==SDL_BUTTON_LEFT)
+        {
+            mouseDown.x=eventM.button.x;
+            mouseDown.y=eventM.button.y;
+        }
     }
+
     else if (eventM.type == SDL_MOUSEBUTTONUP)
     {
         if (eventM.button.button==SDL_BUTTON_LEFT)
@@ -92,6 +94,44 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
     return Null;
 }
 
+
+/****************** Nom de la fonction **********************
+* hitboxMonster                                             *
+******************** Auteur , Dates *************************
+* Tristan RENAUDON, 09/12/16                                *
+********************* Description ***************************
+* Deteecte si la souris clique sur un monstre               *
+*********************** Entrées *****************************
+* la grille, les coordonnées de la souris lors d'un clique  *
+* la taille x/y d'une case, et l'offset de l'image          *
+*********************** Sorties *****************************
+* l'indice du monstre détécté -1 sinon                      *
+************************************************************/
+int hitboxMonster(level grille, coordCartesiennes mouseDown, int coefx, int coefy, int offsetX, int offsetY, int &k)
+{
+    int j=-1;
+    bool onMonster=false;
+
+    if( k<grille.nbMonster && !onMonster )
+    {
+        if (    grille.tabMonster[k].l*coefy+offsetY <= mouseDown.y
+                && (grille.tabMonster[k].l+1)*coefy+offsetY >= mouseDown.y
+                && grille.tabMonster[k].c*coefx+offsetX <= mouseDown.x
+                && (grille.tabMonster[k].c+1)*coefx+offsetX >= mouseDown.x
+                && grille.tabMonster[k].type==STANDARD)
+        {
+            onMonster=true;
+            j=k;
+            cout << "tru" << endl;
+        }
+        k++;
+    }
+    if(k>=grille.nbMonster)
+    {
+        k=0;
+    }
+    return j;
+}
 
 /****************** Nom de la fonction **********************
 * coefDir                                                   *
@@ -155,6 +195,8 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
                 dir=grille.tabArrow[i].type;
                 colonneCoef=coefDir(dir).c;
                 ligneCoef=coefDir(dir).l;
+                grille.tabMonster[monsterId].l=monstre.l;
+                grille.tabMonster[monsterId].c=monstre.c;
                 anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
             }
         }
@@ -221,88 +263,3 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
     grille.tabMonster[monsterId].c=monstre.c;
 
 }
-
-
-/****************** Nom de la fonction **********************
-* monsterMovement                                           *
-******************** Auteur , Dates *************************
-* Tristan RENAUDON, 09/11/16                                *
-********************* Description ***************************
-* Déplace le monstre en fonction des evènements du jeux     *
-*********************** Entrées *****************************
-* La matrice, la direction choisie, la ligne et la colonne  *
-* du monstre                                                *
-*********************** Sorties *****************************
-* Le tableau modifié, si le joueur est en vie               *
-*************************************************************/
-/*
-bool monsterMovement(grilleLevel &grille, int &dir, int &ligne, int &colonne)
-{
-    bool exit=false;
-    bool alive=true;
-    int i=0,j=0;
-
-    if(dir==Up)
-    {
-        j=-1;
-        i=0;
-    }
-    else if(dir==Down)
-    {
-        j=1;
-        i=0;
-    }
-    else if(dir==Left)
-    {
-        i=-1;
-        j=0;
-    }
-    else if(dir==Right)
-    {
-        i=1;
-        j=0;
-    }
-
-    if(dir!=Null && ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<=TAILLE_COLONNE && !exit)
-    {
-       while(ligne+j>=0 && ligne+j<=TAILLE_LIGNE && colonne+i>=0 && colonne+i<TAILLE_COLONNE && !exit)
-       {
-           if(grille[ligne+j][colonne+i]==Void)
-           {
-               cout << "void" << endl;
-
-               grille[ligne][colonne]=Void;
-               ligne=ligne+j;
-               colonne=colonne+i;
-               grille[ligne][colonne]=Awake;
-           }
-           else if(grille[ligne+j][colonne+i]==Ice)
-           {
-               cout << "ice" << endl;
-               grille[ligne+j][colonne+i]=Void;
-               exit=true;
-           }
-           else if(grille[ligne+j][colonne+i]==Sleep)
-           {
-               cout << "sleep" << endl;
-               exit=true;
-           }
-           else if(grille[ligne+j][colonne+i]==Wall)
-           {
-               cout << "mur" << endl;
-               exit=true;
-           }
-           else
-           {
-               exit=true;
-           }
-       }
-       if(ligne+j<0 && ligne+j>=TAILLE_LIGNE && colonne+i<0 && colonne+i>=TAILLE_COLONNE)
-       {
-           alive=false;
-       }
-       dir = Null;
-    }
-    return alive;
-}
-*/

@@ -135,9 +135,10 @@ int main()
     int Etat_Jeu=Menu;
     bool quit = false;
     int dir = Null;
-    int i =0;
     bool outOfGrid=false;
 
+    int j = 0;
+    int k = 0;
 
 
 
@@ -162,7 +163,7 @@ int main()
         case Play:
 
             applySurface(0,0,fondJeu,screen,NULL);
-            SDL_WaitEvent(&eventM);
+            SDL_PollEvent(&eventM);
 
             if(eventM.type==SDL_QUIT){
                 quit=true;
@@ -181,11 +182,12 @@ int main()
 
 
 
-            dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
-            if (dir != Null){
-                i++;
-                cout  << i << endl;
-                updateLevel(grille,0,dir,outOfGrid,screen,initialOff,clipAwake,imgAwake,coefx,coefy);
+            dir=direction(eventM,mouseDown,mouseDownReleased,swipe);
+            j=hitboxMonster(grille,mouseDown,coefx,coefy,initialOff.xOffset,initialOff.yOffset,k);
+
+            if(dir != Null && j!= -1)
+            {
+                updateLevel(grille,j,dir,outOfGrid,screen,initialOff,clipAwake,imgAwake,coefx,coefy);
             }
 
             if(grille.nbMonsterSleeping==0){

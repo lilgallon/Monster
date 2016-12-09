@@ -26,6 +26,8 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
 void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
                  SDL_Surface *screen, offset initialOff, SDL_Rect clipAwake, SDL_Surface *imgAwake,
                  int coefx, int coefy);
+int hitboxMonster(level grille, coordCartesiennes mouse, int coefx, int coefy, int offsetX, int offsetY, int &k);
+
 
 
 #endif // DEPLACEMENT_H
