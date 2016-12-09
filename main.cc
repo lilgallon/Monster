@@ -23,7 +23,7 @@ const int ECRAN_HEIGHT = 568;
 const int ECRAN_BPP = 32;
 const int NB_LEVEL = 6;
 
-enum {Menu,Play};
+enum {Menu,Play,Lost};
 
 int main()
 {
@@ -189,13 +189,21 @@ int main()
             }
 
             if(grille.nbMonsterSleeping==0){
-                cout << "Vous avez gagné" << endl;
-                cout << "Avec " << i << " coups." << endl;
+               // cout << "Vous avez gagné" << endl;
+               // cout << "Avec " << i << " coups." << endl;
+                // Passe au niveau suivant
             }else if(outOfGrid){
-                cout << "Vous etes sorti!!" << endl;
+                //cout << "Vous etes sorti!!" << endl;
+                // Passe à l'état "perdu" avec l'écran de défaite
+                // Etat_Jeu=Lost;
             }
 
 
+        break;
+
+        case Lost:
+
+             // Affiche l'écran perdu
         break;
     }
 }
