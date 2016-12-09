@@ -1,5 +1,6 @@
 using namespace std;
 #include "level.h"
+#include "deplacement.h"
 
 // Structure level
 
@@ -15,7 +16,7 @@ using namespace std;
 * -                                                         *
 ************************************************************/
 
-void initLevel2(int lvl, level & grille)
+void initLevel(int lvl, level & grille)
 {
 
     //initTabLevel1(grille,taille_colonne,taille_ligne);
@@ -31,12 +32,21 @@ void initLevel2(int lvl, level & grille)
         grille.tabWall[1].l=0;
         grille.tabWall[1].c=2;
 
-        grille.tabWall[2].l=5;
-        grille.tabWall[2].c=0;
+//        grille.tabWall[2].l=5;
+//        grille.tabWall[2].c=0;
 
-        grille.tabWall[3].l=8;
-        grille.tabWall[3].c=2;
-        grille.nbWall=4;
+        grille.tabArrow[0].l=3;
+        grille.tabArrow[0].c=3;
+        grille.tabArrow[0].type=Up;
+
+        grille.tabArrow[1].l=3;
+        grille.tabArrow[1].c=2;
+        grille.tabArrow[1].type=Down;
+        grille.nbArrow=2;
+
+        grille.tabWall[2].l=8;
+        grille.tabWall[2].c=2;
+        grille.nbWall=3;
         // Ice
         grille.tabIce[0].l=7;
         grille.tabIce[0].c=0;

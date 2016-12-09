@@ -144,7 +144,6 @@ bool overCircle(int circleX, int circleY, int circleR){
 }
 
 
-
 /****************** Nom de la fonction **********************
 * showGrid                                                  *
 ******************** Auteur , Dates *************************
@@ -158,25 +157,116 @@ bool overCircle(int circleX, int circleY, int circleR){
 * -                                                          *
 * ***********************************************************/
 
-void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff,
+void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff, offset arrowOff,
               int coefx, int coefy,
               SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
+              SDL_Surface *imgaLeft, SDL_Surface *imgaRight, SDL_Surface *imgaUp, SDL_Surface *imgaDown,
               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
+              SDL_Rect clipArrowRight, SDL_Rect clipArrowLeft, SDL_Rect clipArrowDown, SDL_Rect clipArrowUp,
               level grille){
 
     for(int i=0; i<grille.nbMonster ; i ++){
         if(grille.tabMonster[i].type==SLEEPING){
-            applySurface(grille.tabMonster[i].c*coefy+sleepOff.yOffset,grille.tabMonster[i].l*coefx+sleepOff.xOffset,imgSleep,screen,&clipSleep);
+            applySurface(grille.tabMonster[i].c*coefx+sleepOff.xOffset,grille.tabMonster[i].l*coefy+sleepOff.yOffset,imgSleep,screen,&clipSleep);
         }else if (grille.tabMonster[i].type==STANDARD){
-            applySurface(grille.tabMonster[i].c*coefy+initialOff.yOffset,grille.tabMonster[i].l*coefx+initialOff.xOffset,imgAwake,screen,&clipAwake);
+            applySurface(grille.tabMonster[i].c*coefx+initialOff.xOffset,grille.tabMonster[i].l*coefy+initialOff.yOffset,imgAwake,screen,&clipAwake);
         }
     }
     for(int i=0; i<grille.nbIce ; i++){
-        applySurface(grille.tabIce[i].c*coefy+initialOff.yOffset,grille.tabIce[i].l*coefx+initialOff.xOffset,imgIce,screen,&clipIce);
+        applySurface(grille.tabIce[i].c*coefx+initialOff.xOffset,grille.tabIce[i].l*coefy+initialOff.yOffset,imgIce,screen,&clipIce);
     }
     for(int i=0; i<grille.nbWall; i++){
-        applySurface(grille.tabWall[i].c*coefy+wallOff.yOffset,grille.tabWall[i].l*coefx+wallOff.xOffset,imgWall,screen,&clipWall);
+        applySurface(grille.tabWall[i].c*coefx+wallOff.xOffset,grille.tabWall[i].l*coefy+wallOff.yOffset,imgWall,screen,&clipWall);
     }
+    for(int i=0; i<grille.nbArrow; i++){
+        if(grille.tabArrow[i].type==Left){
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaLeft,screen,&clipArrowLeft);
+        }else if(grille.tabArrow[i].type==Up){
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaUp,screen,&clipArrowUp);
+        }else if(grille.tabArrow[i].type==Down){
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaDown,screen,&clipArrowDown);
+        }else if(grille.tabArrow[i].type==Right){
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaRight,screen,&clipArrowRight);
+        }
+    }
+}
+
+/****************** Nom de la fonction **********************
+* anime                                                     *
+******************** Auteur , Dates *************************
+* Lilian GALLON,  09/12/16                                  *
+********************* Description ***************************
+* Anime un objet à partir de sa position initiale et de sa  *
+* position finale                                           *
+************************ Entrées ****************************
+* le niveau (grille), la position finale, la position       *
+* initiale, le clip du monstre, le coef x et y (longeur et  *
+* hauteur d'une case de la grille, le décalage initial,     *
+* car al grille commence pas à 0,0, l'id du monstre qui va  *
+* etre animé, et la direction                               *
+*********************** Sorties *****************************
+* -                                                          *
+*************************************************************/
+
+void anime(level grille, coordGrille posFin2,
+           offset initialOff, SDL_Rect clipAwake,
+           int coefx, int coefy,
+           SDL_Surface *screen, SDL_Surface *imgAwake,
+           int dir, int idMonster){
+
+    coordCartesiennes posInit;
+    posInit.x=grille.tabMonster[idMonster].c;
+    posInit.y=grille.tabMonster[idMonster].l;
+
+    coordCartesiennes posFin;
+    posFin.x=posFin2.c;
+    posFin.y=posFin2.l;
+
+
+    // Convertir lignes et colonnes en pixel
+    coordCartesiennes posInitPixel;
+    posInitPixel.x=posInit.x*coefx+initialOff.xOffset;
+    posInitPixel.y=posInit.y*coefy+initialOff.yOffset;
+
+    coordCartesiennes posFinPixel;
+    posFinPixel.x=posFin.x*coefx+initialOff.xOffset;
+    posFinPixel.y=posFin.y*coefy+initialOff.yOffset;
+    // Fin convertion
+
+   // Tant que la pos initiale n'a pas atteint la pos finale, ..
+
+    if(dir==Right){
+        while(posInitPixel.x<posFinPixel.x){
+            SDL_Flip(screen);
+            posInitPixel.x ++;
+            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+        }
+
+    }else if(dir==Left){
+
+        while(posInitPixel.x>posFinPixel.x){
+            SDL_Flip(screen);
+            posInitPixel.x --;
+            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+        }
+
+    }else if(dir==Down){
+
+        while(posInitPixel.y<posFinPixel.y){
+            SDL_Flip(screen);
+            posInitPixel.y ++;
+            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+        }
+
+    }else if(dir==Up){
+
+        while(posInitPixel.y>posFinPixel.y){
+            SDL_Flip(screen);
+            posInitPixel.y --;
+            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+        }
+    }
+
 }
 
 

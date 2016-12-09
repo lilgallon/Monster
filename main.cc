@@ -8,8 +8,9 @@
 #include <array>
 
 #include "level.h"
-#include "affichage.h"
+
 #include "deplacement.h"
+#include "affichage.h"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ int main()
     SDL_Surface *fondJeu;
     SDL_Surface *screen;
     SDL_Surface *imgWall, *imgIce, *imgAwake, *imgSleep;
+    SDL_Surface *imgaLeft, *imgaRight, *imgaUp, *imgaDown;
 
     screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
 
@@ -46,6 +48,10 @@ int main()
     imgIce = loadImageWithColorKey("sprite.bmp",255,255,255);
     imgAwake = loadImageWithColorKey("sprite.bmp",255,255,255);
     imgSleep = loadImageWithColorKey("sprite.bmp",255,255,255);
+    imgaLeft = loadImageWithColorKey("sprite.bmp",255,255,255);
+    imgaRight = loadImageWithColorKey("sprite.bmp",255,255,255);
+    imgaUp = loadImageWithColorKey("sprite.bmp",255,255,255);
+    imgaDown = loadImageWithColorKey("sprite.bmp",255,255,255);
 
 
 
@@ -73,21 +79,43 @@ int main()
     clipSleep.y=0;
     clipSleep.w=72;
     clipSleep.h=64;
+    SDL_Rect clipArrowLeft;
+    clipArrowLeft.x=159;
+    clipArrowLeft.y=224;
+    clipArrowLeft.w=43;
+    clipArrowLeft.h=38;
+    SDL_Rect clipArrowRight;
+    clipArrowRight.x=107;
+    clipArrowRight.y=224;
+    clipArrowRight.w=43;
+    clipArrowRight.h=38;
+    SDL_Rect clipArrowUp;
+    clipArrowUp.x=62;
+    clipArrowUp.y=224;
+    clipArrowUp.w=43;
+    clipArrowUp.h=38;
+    SDL_Rect clipArrowDown;
+    clipArrowDown.x=15;
+    clipArrowDown.y=224;
+    clipArrowDown.w=43;
+    clipArrowDown.h=38;
+
 
     offset initialOff;
-    initialOff.xOffset = 33;
-    initialOff.yOffset = 16;
+    initialOff.xOffset = 16;
+    initialOff.yOffset = 33;
     offset sleepOff;
-    sleepOff.xOffset = 23;
-    sleepOff.yOffset = 8;
+    sleepOff.xOffset = 9;
+    sleepOff.yOffset = 23;
     offset wallOff;
-    wallOff.xOffset = 25;
-    wallOff.yOffset = 9;
+    wallOff.xOffset = 9;
+    wallOff.yOffset = 25;
     offset iceOff;
     offset awakeOff;
+    offset arrowOff;
 
-    int coefy = 60;
-    int coefx = 52;
+    int coefy = 52;
+    int coefx = 60;
 
     /**************************************
      * Initialisations liées à la grille et au lvl
@@ -95,15 +123,15 @@ int main()
 
     // Version 3
     int lvl = 1;
-    level grille2;
-    initLevel2(lvl,grille2);
+    level grille;
+    initLevel(lvl,grille);
 
     /****************************************
      * Autres initialisations
      * **************************************/
 
     SDL_Event event, eventM;
-    coord mouseDown, mouseDownReleased, swipe;
+    coordCartesiennes mouseDown, mouseDownReleased, swipe;
     int Etat_Jeu=Menu;
     bool quit = false;
     int dir = Null;
@@ -142,17 +170,25 @@ int main()
 
             // Version 3
 
-            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,coefx, coefy,imgWall,imgIce,imgSleep,imgAwake,screen,clipWall,clipIce,clipSleep,clipAwake,grille2);
+            showGrid(wallOff,iceOff,awakeOff,sleepOff,initialOff,arrowOff,
+                     coefx, coefy,
+                     imgWall,imgIce,imgSleep,imgAwake, screen,
+                     imgaLeft,imgaRight,imgaUp,imgaDown,
+                     clipWall,clipIce,clipSleep,clipAwake,
+                     clipArrowRight,clipArrowLeft,clipArrowDown,clipArrowUp,
+                     grille);
+
+
 
 
             dir = direction(eventM,mouseDown,mouseDownReleased,swipe);
             if (dir != Null){
                 i++;
                 cout  << i << endl;
-                updateLevel(grille2,0,dir,outOfGrid);
+                updateLevel(grille,0,dir,outOfGrid,screen,initialOff,clipAwake,imgAwake,coefx,coefy);
             }
 
-            if(grille2.nbMonsterSleeping==0){
+            if(grille.nbMonsterSleeping==0){
                 cout << "Vous avez gagné" << endl;
                 cout << "Avec " << i << " coups." << endl;
             }else if(outOfGrid){

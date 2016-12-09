@@ -2,6 +2,7 @@
 #include <iostream>
 #include "deplacement.h"
 #include "level.h"
+#include "affichage.h"
 
 using namespace std;
 
@@ -40,7 +41,7 @@ int absoluteValue(int val)
 *********************** Sorties *****************************
 * Direction choisie                                         *
 ************************************************************/
-int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe)
+int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes mouseDownReleased, coordCartesiennes swipe)
 {
     if (eventM.type == SDL_MOUSEBUTTONDOWN)
     {
@@ -93,22 +94,47 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 
 
 /****************** Nom de la fonction **********************
-* columnMvt                                                 *
+* coefDir                                                   *
+******************** Auteur , Dates *************************
+* Lilian GALLON , 09/12/16                                  *
+********************* Description ***************************
+* Calcule les coefficients en fonction de la direction du   *
+* monstre                                                   *
+*********************** Entrées *****************************
+* La direction du monstre                                   *
+*********************** Sorties *****************************
+* Les coefficients de la direction du monstre               *
+*************************************************************/
+
+coordGrille coefDir(int dir){
+    coordGrille coef;
+    if(dir==Up){coef.l = -1; coef.c=0;}
+    else if(dir==Down){coef.l = 1; coef.c=0;}
+    else if(dir==Left){coef.l=0; coef.c=-1;}
+    else if(dir==Right){coef.l=0; coef.c=1;}
+    return coef;
+}
+
+/****************** Nom de la fonction **********************
+* updateLevel                                               *
 ******************** Auteur , Dates *************************
 * Lilian GALLON & Tristan Renaudon, 07/12/16                *
 ********************* Description ***************************
-* Calcule les coordonnées d'arrivée du déplacement du       *
-*  monstre                                                  *
-*********************** Entrées *****************************
+* Met à jour la grille et anime le déplacement d'un monstre *
+************************ Entrées ****************************
 * La structure level, la direction choisie,                 *
-* d'id du monstre à déplacer                                *
+* d'id du monstre à déplacer, et une variable indiquant si  *
+* le monstre est sorti de la grille                         *
 *********************** Sorties *****************************
-* Les coordonnées d'arrivée du monstre                      *
+* -                                                          *
 *************************************************************/
 
-void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
 
-    coord2 monstre;
+void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
+                 SDL_Surface *screen, offset initialOff, SDL_Rect clipAwake, SDL_Surface *imgAwake,
+                 int coefx, int coefy){
+
+    coordGrille monstre;
     monstre.l=grille.tabMonster[monsterId].l;
     monstre.c=grille.tabMonster[monsterId].c;
     bool exit = false;
@@ -116,17 +142,25 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
     int colonneCoef;
 
     // Faire des if pour trouver les coef selon dir
-    if(dir==Up){ligneCoef = -1; colonneCoef=0;}
-    else if(dir==Down){ligneCoef = 1; colonneCoef=0;}
-    else if(dir==Left){ligneCoef=0; colonneCoef=-1;}
-    else if(dir==Right){ligneCoef=0; colonneCoef=1;}
-
+    colonneCoef=coefDir(dir).c;
+    ligneCoef=coefDir(dir).l;
 
     while(!exit){
 
-
+        for(int i=0;i<grille.nbArrow;i++){
+            if(grille.tabArrow[i].l==monstre.l+ligneCoef && grille.tabArrow[i].c==monstre.c+colonneCoef){
+                monstre.c=monstre.c+colonneCoef;
+                monstre.l=monstre.l+ligneCoef;
+                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                dir=grille.tabArrow[i].type;
+                colonneCoef=coefDir(dir).c;
+                ligneCoef=coefDir(dir).l;
+                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+            }
+        }
 
         if(monstre.l+ligneCoef==TAILLE_LIGNE || monstre.l+ligneCoef==-1 || monstre.c+colonneCoef==TAILLE_COLONNE || monstre.c+colonneCoef==-1){
+            anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
             outOfGrid=true;
             exit = true;
         }
@@ -137,6 +171,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
                 if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
 //                    monstre.c=monstre.c-colonneCoef;
 //                    monstre.l=monstre.l-ligneCoef;
+                    anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
                     exit = true;
                 }
             }
@@ -146,6 +181,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
                     grille.nbMonsterSleeping --;
 //                    monstre.c=monstre.c-colonneCoef;
 //                    monstre.l=monstre.l-ligneCoef;
+                    anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
                     exit= true;
                 }
             }
@@ -157,6 +193,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
                 // On détecte qu'il y a un monstre juste à côté en x (colonne)
 //                monstre.c=monstre.c-colonneCoef;
 //                monstre.l=monstre.l-ligneCoef;
+                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
                 exit = true;
             }
         }
@@ -170,6 +207,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
                 grille.nbIce --;
 //                monstre.c=monstre.c-colonneCoef;
 //                monstre.l=monstre.l-ligneCoef;
+                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
                exit = true;
             }
         }

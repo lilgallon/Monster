@@ -22,12 +22,14 @@ struct level{
     std::array<object,NB_MAX_OBJECT> tabMonster;
     int nbMonster;
     int nbMonsterSleeping;
+    std::array<object,NB_MAX_OBJECT> tabArrow;
+    int nbArrow;
     std::array<object,NB_MAX_OBJECT> tabWall;
     int nbWall;
     std::array<object,NB_MAX_OBJECT> tabIce;
     int nbIce;
 };
 
-void initLevel2(int lvl, level & grille);
+void initLevel(int lvl, level & grille);
 
 #endif

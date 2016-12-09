@@ -9,12 +9,7 @@
 #include <string>
 
 #include "level.h"
-
-
-struct offset{
-    int xOffset;
-    int yOffset;
-};
+#include "deplacement.h"
 
 
 /*********************************
@@ -40,12 +35,16 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
                    SDL_Rect *overClip, SDL_Rect *defaultClip,
                    SDL_Event event);
 
+void anime(level grille, coordGrille posFin2,
+           offset initialOff, SDL_Rect clipAwake,
+           int coefx, int coefy, SDL_Surface *screen, SDL_Surface *imgAwake,
+           int dir, int idMonster);
 
 // Version 3
-void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff,
+void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff, offset arrowOff,
                int coefx, int coefy,
-               SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
-               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
+               SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen, SDL_Surface *imgaLeft, SDL_Surface *imgaRight, SDL_Surface *imgaUp, SDL_Surface *imgaDown,
+               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake, SDL_Rect clipArrowRight, SDL_Rect clipArrowLeft, SDL_Rect clipArrowDown, SDL_Rect clipArrowUp,
                level grille);
 
 #endif
