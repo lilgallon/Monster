@@ -18,7 +18,7 @@ struct coord2{
 enum {Null, Left, Right, Up, Down};
 
 int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coord swipe);
-void updateLevel(level &grille,int monsterId, int dir);
+void updateLevel(level &grille, int monsterId, int dir, bool &outOfGrid);
 
 
 #endif // DEPLACEMENT_H

@@ -106,7 +106,7 @@ int direction(SDL_Event &eventM, coord &mouseDown, coord mouseDownReleased, coor
 * Les coordonnées d'arrivée du monstre                      *
 *************************************************************/
 
-void updateLevel(level &grille,int monsterId, int dir){
+void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid){
 
     coord2 monstre;
     monstre.l=grille.tabMonster[monsterId].l;
@@ -122,11 +122,14 @@ void updateLevel(level &grille,int monsterId, int dir){
     else if(dir==Right){ligneCoef=0; colonneCoef=1;}
 
 
-    while(monstre.l+ligneCoef<TAILLE_LIGNE && monstre.l+ligneCoef>=0
-          && monstre.c+colonneCoef<TAILLE_COLONNE && monstre.c+colonneCoef>=0
-          && !exit){
+    while(!exit){
 
-        //pb colonne
+
+
+        if(monstre.l+ligneCoef==TAILLE_LIGNE || monstre.l+ligneCoef==-1 || monstre.c+colonneCoef==TAILLE_COLONNE || monstre.c+colonneCoef==-1){
+            outOfGrid=true;
+            exit = true;
+        }
 
         // On vérifie si il ya un monstre sur le passage
         for(int i=0;i<grille.nbMonster;i++){

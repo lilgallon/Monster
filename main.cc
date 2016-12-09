@@ -108,6 +108,7 @@ int main()
     bool quit = false;
     int dir = Null;
     int i =0;
+    bool outOfGrid=false;
 
 
 
@@ -148,12 +149,14 @@ int main()
             if (dir != Null){
                 i++;
                 cout  << i << endl;
-                updateLevel(grille2,0,dir);
+                updateLevel(grille2,0,dir,outOfGrid);
             }
 
             if(grille2.nbMonsterSleeping==0){
                 cout << "Vous avez gagné" << endl;
                 cout << "Avec " << i << " coups." << endl;
+            }else if(outOfGrid){
+                cout << "Vous etes sorti!!" << endl;
             }
 
 
