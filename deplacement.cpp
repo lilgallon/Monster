@@ -7,6 +7,26 @@
 using namespace std;
 
 /****************** Nom de la fonction **********************
+* suppOccurenceIce                                          *
+******************** Auteur , Dates *************************
+* Lilian GALLON, 12/12/16                                   *
+********************* Description ***************************
+* Supprime une occurence d'un tableau                       *
+*********************** Entrées *****************************
+* LA grille, et l'indice de la glace à effacer              *
+*********************** Sorties *****************************
+* -                                                         *
+************************************************************/
+
+void suppOccIce(level &grille,int idIce){
+    for(int i=0; i<grille.nbIce ; i++){
+        grille.tabIce[idIce+i]=grille.tabIce[idIce+1+i];
+    }
+}
+
+
+
+/****************** Nom de la fonction **********************
 * absoluteValue                                             *
 ******************** Auteur , Dates *************************
 * Tristan RENAUDON, 09/11/16                                *
@@ -231,11 +251,14 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid, SDL_Surf
 
         for(int i=0;i<grille.nbIce;i++){
             if(grille.tabIce[i].l==monstre.l+ligneCoef && grille.tabIce[i].
-                    c==monstre.c+colonneCoef){
-                // pour faire zizi dur profs go faire décalage gauche
-                grille.tabIce[i].l=-1;
-                grille.tabIce[i].c=-1;
-                grille.nbIce --;
+                    c==monstre.c+colonneCoef
+                    && monstre.l==grille.tabMonster[monsterId].l
+                    && monstre.c==grille.tabMonster[monsterId].c){
+                exit = true;
+
+            }else if(grille.tabIce[i].l==monstre.l+ligneCoef && grille.tabIce[i].c==monstre.c+colonneCoef){
+                suppOccIce(grille,i);
+                grille.nbIce = grille.nbIce - 1;
                 anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }

@@ -101,8 +101,7 @@ loadImageWithColorKey(string filename, int r, int g, int b)
 /****************** Nom de la fonction **********************
 * overCircle                                                *
 ******************** Auteur , Dates *************************
-* Lilian GALLON  18/11/16                                   *
-********************* Description ***************************
+* Lilian GALLON & Tristan RENAUDON      18/11/16            * ********************* Description ***************************
 * Permet de savoir quand l'utilisateur a son curseur sur un *
 * un bouton rond                                            *
 *********************** Entrées *****************************
@@ -165,7 +164,7 @@ void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille){
         applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowRight);
         }
     }
-    for(int i=0; i<grille.nbMonster ; i ++){
+    for(int i=0; i<grille.nbMonster+grille.nbMonsterSleeping ; i ++){
         if(grille.tabMonster[i].type==SLEEPING){
             applySurface(grille.tabMonster[i].c*coefx+sleepOff.xOffset,grille.tabMonster[i].l*coefy+sleepOff.yOffset,imgObject,screen,&clipSleep);
         }else if (grille.tabMonster[i].type==STANDARD){

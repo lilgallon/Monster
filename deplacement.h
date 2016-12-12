@@ -27,6 +27,6 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
 void updateLevel(level &grille, int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu);
 int hitboxMonster(level grille, coordCartesiennes mouse, int &k);
 
-
+void suppOccIce(level &grille,int idIce);
 
 #endif

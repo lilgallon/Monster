@@ -23,8 +23,8 @@ const int ECRAN_HEIGHT = 568;
 const int ECRAN_BPP = 32;
 const int NB_LEVEL = 6;
 
+enum {Menu,Play,GameOver};
 
-enum {Menu,Play,Lost};
 
 
 int main()
@@ -74,8 +74,7 @@ int main()
 
 
     while (!quit){
-
-        SDL_Flip(screen);
+                SDL_Flip(screen);
 
         switch(Etat_Jeu){
         case Menu:
@@ -95,7 +94,9 @@ int main()
 
             applySurface(0,0,fondJeu,screen,NULL);
 
-            SDL_PollEvent(&eventM);
+            while (SDL_PollEvent(&eventM)){
+
+            }
 
             if(eventM.type==SDL_QUIT){
                 quit=true;
@@ -105,43 +106,47 @@ int main()
 
             showGrid(imgObject,screen,grille);
 
-
-
-
             dir=direction(eventM,mouseDown,mouseDownReleased,swipe);
             j=hitboxMonster(grille,mouseDown,k);
 
             if(dir != Null && j!= -1)
             {
                 updateLevel(grille,j,dir,outOfGrid,screen,imgObject,fondJeu);
+                dir = Null;
+            }
+            if(overCircle(93,531,26)){
+                initLevel(lvl,grille);
             }
 
             if(grille.nbMonsterSleeping==0){
-               // cout << "Vous avez gagné" << endl;
-               // cout << "Avec " << i << " coups." << endl;
-                // Passe au niveau suivant
+                lvl ++;
+                if(lvl>NB_LEVEL){
+                    Etat_Jeu=GameOver;
+                }else{
+                    initLevel(lvl,grille);
+                }
+
             }else if(outOfGrid){
-                //cout << "Vous etes sorti!!" << endl;
-                // Passe à l'état "perdu" avec l'écran de défaite
-                // Etat_Jeu=Lost;
+                initLevel(lvl,grille);
             }
 
 
-        break;
+            break;
 
-        case Lost:
+        case GameOver:
 
-             // Affiche l'écran perdu
-        break;
+            // Affiche l'écran perdu
+            break;
+        }
+
     }
-}
 
-SDL_FreeSurface(screen);
-SDL_FreeSurface(imgObject);
-SDL_FreeSurface(fondAccueil1);
-SDL_FreeSurface(fondAccueil2);
-SDL_FreeSurface(fondJeu);
+    SDL_FreeSurface(screen);
+    SDL_FreeSurface(imgObject);
+    SDL_FreeSurface(fondAccueil1);
+    SDL_FreeSurface(fondAccueil2);
+    SDL_FreeSurface(fondJeu);
 
-return 0;
+    return 0;
 }
 
