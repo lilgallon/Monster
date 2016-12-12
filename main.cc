@@ -39,6 +39,7 @@ int main()
     SDL_Surface *fondJeu;
     SDL_Surface *screen;
     SDL_Surface *imgObject;
+    SDL_Surface *transition, *endgame;
 
     screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
 
@@ -46,6 +47,8 @@ int main()
     fondAccueil1=loadImage("menu.bmp");
     fondAccueil2=loadImage("menu_play.bmp");
     imgObject = loadImageWithColorKey("sprite.bmp",255,255,255);
+    transition = loadImage("winSprite.bmp");
+    endgame = loadImage("winEndSprite.bmp");
 
 
     /**************************************
@@ -74,12 +77,14 @@ int main()
 
 
     while (!quit){
-                SDL_Flip(screen);
+        SDL_Flip(screen);
 
         switch(Etat_Jeu){
         case Menu:
 
-            SDL_PollEvent(&event);
+            while(SDL_PollEvent(&event)){
+            }
+
 
             if(event.type==SDL_QUIT){
                 quit=true;
@@ -119,14 +124,20 @@ int main()
             }
 
             if(grille.nbMonsterSleeping==0){
+
                 lvl ++;
                 if(lvl>NB_LEVEL){
                     Etat_Jeu=GameOver;
                 }else{
+                    applySurface(0,0,transition,screen,NULL);
+                    SDL_Flip(screen);
+                    dir = Null;
+                    SDL_Delay(1000);
                     initLevel(lvl,grille);
                 }
 
             }else if(outOfGrid){
+                cout << "out" << endl;
                 initLevel(lvl,grille);
             }
 
@@ -135,7 +146,17 @@ int main()
 
         case GameOver:
 
-            // Affiche l'écran perdu
+            while (SDL_PollEvent(&eventM)){
+
+            }
+
+        applySurface(0,0,endgame,screen,NULL);
+        SDL_Flip(screen);
+
+        if(eventM.type==SDL_QUIT){
+            quit=true;
+        }
+
             break;
         }
 

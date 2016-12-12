@@ -224,7 +224,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid, SDL_Surf
         }
 
         // On vérifie si il ya un monstre sur le passage
-        for(int i=0;i<grille.nbMonster;i++){
+        for(int i=0;i<grille.nbMonster+grille.nbMonsterSleeping;i++){
             if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
                 if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
                     anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
@@ -235,6 +235,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid, SDL_Surf
                 if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
                     grille.tabMonster[i].type=STANDARD;
                     grille.nbMonsterSleeping --;
+                    grille.nbMonster ++;
                     anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                     exit= true;
                 }

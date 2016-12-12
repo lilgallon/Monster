@@ -82,9 +82,9 @@ void initLevel(int lvl, level & grille)
         grille.tabMonster[1].c=3;
         grille.tabMonster[1].type=SLEEPING;
         // Arrow
-        grille.tabArrow[1].l=1;
-        grille.tabArrow[1].c=3;
-        grille.tabArrow[1].type=Down;
+        grille.tabArrow[0].l=1;
+        grille.tabArrow[0].c=3;
+        grille.tabArrow[0].type=Down;
         // Nb objects
         grille.nbMonster=1;
         grille.nbMonsterSleeping=1;
@@ -100,9 +100,9 @@ void initLevel(int lvl, level & grille)
         grille.tabMonster[1].c=3;
         grille.tabMonster[1].type=SLEEPING;
         // Arrow
-        grille.tabArrow[1].l=1;
-        grille.tabArrow[1].c=3;
-        grille.tabArrow[1].type=Down;
+        grille.tabArrow[0].l=1;
+        grille.tabArrow[0].c=3;
+        grille.tabArrow[0].type=Down;
         // Ice
         grille.tabIce[0].l=3;
         grille.tabIce[0].c=3;
@@ -122,9 +122,9 @@ void initLevel(int lvl, level & grille)
         grille.tabMonster[1].c=3;
         grille.tabMonster[1].type=SLEEPING;
         // Arrow
-        grille.tabArrow[1].l=1;
-        grille.tabArrow[1].c=3;
-        grille.tabArrow[1].type=Down;
+        grille.tabArrow[0].l=1;
+        grille.tabArrow[0].c=3;
+        grille.tabArrow[0].type=Down;
         // Ice
         grille.tabIce[0].l=3;
         grille.tabIce[0].c=3;
