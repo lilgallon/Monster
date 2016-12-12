@@ -60,26 +60,14 @@ SDL_Surface *loadImage( string filename ){
 ************************************************************/
 void
 applySurface(int x, int y, SDL_Surface* source,
-             SDL_Surface* destination, SDL_Rect* clip)
+             SDL_Surface* destination, const SDL_Rect* clip)
 {
     SDL_Rect offset;
     offset.x = x;
     offset.y = y;
-    SDL_BlitSurface( source, clip, destination, &offset );
+    SDL_BlitSurface( source, (SDL_Rect*)clip, destination, &offset );
 }
 
-/****************** Nom de la fonction **********************
-* afficheGrille                                             *
-******************** Auteur , Dates *************************
-* Lilian GALLON                                             *
-********************* Description ***************************
-* Permet d'afficher à l'écran le contenu du tableau en      *
-* images                                                    *
-*********************** Entrées *****************************
-* Le nombre de lignes et de colonnes, la grille             *
-*********************** Sorties *****************************
-* -                                                         *
-************************************************************/
 // -- loadImageWithColorKey ------------
 // Auteur: Atelier PONG
 // Cette fonction permet de charger une
@@ -157,36 +145,31 @@ bool overCircle(int circleX, int circleY, int circleR){
 * -                                                          *
 * ***********************************************************/
 
-void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff, offset arrowOff,
-              int coefx, int coefy,
-              SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen,
-              SDL_Surface *imgaLeft, SDL_Surface *imgaRight, SDL_Surface *imgaUp, SDL_Surface *imgaDown,
-              SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake,
-              SDL_Rect clipArrowRight, SDL_Rect clipArrowLeft, SDL_Rect clipArrowDown, SDL_Rect clipArrowUp,
-              level grille){
+void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille){
 
-    for(int i=0; i<grille.nbMonster ; i ++){
-        if(grille.tabMonster[i].type==SLEEPING){
-            applySurface(grille.tabMonster[i].c*coefx+sleepOff.xOffset,grille.tabMonster[i].l*coefy+sleepOff.yOffset,imgSleep,screen,&clipSleep);
-        }else if (grille.tabMonster[i].type==STANDARD){
-            applySurface(grille.tabMonster[i].c*coefx+initialOff.xOffset,grille.tabMonster[i].l*coefy+initialOff.yOffset,imgAwake,screen,&clipAwake);
-        }
-    }
+
     for(int i=0; i<grille.nbIce ; i++){
-        applySurface(grille.tabIce[i].c*coefx+initialOff.xOffset,grille.tabIce[i].l*coefy+initialOff.yOffset,imgIce,screen,&clipIce);
+        applySurface(grille.tabIce[i].c*coefx+initialOff.xOffset,grille.tabIce[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipIce);
     }
     for(int i=0; i<grille.nbWall; i++){
-        applySurface(grille.tabWall[i].c*coefx+wallOff.xOffset,grille.tabWall[i].l*coefy+wallOff.yOffset,imgWall,screen,&clipWall);
+        applySurface(grille.tabWall[i].c*coefx+wallOff.xOffset,grille.tabWall[i].l*coefy+wallOff.yOffset,imgObject,screen,&clipWall);
     }
     for(int i=0; i<grille.nbArrow; i++){
         if(grille.tabArrow[i].type==Left){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaLeft,screen,&clipArrowLeft);
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowLeft);
         }else if(grille.tabArrow[i].type==Up){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaUp,screen,&clipArrowUp);
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowUp);
         }else if(grille.tabArrow[i].type==Down){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaDown,screen,&clipArrowDown);
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowDown);
         }else if(grille.tabArrow[i].type==Right){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgaRight,screen,&clipArrowRight);
+        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowRight);
+        }
+    }
+    for(int i=0; i<grille.nbMonster ; i ++){
+        if(grille.tabMonster[i].type==SLEEPING){
+            applySurface(grille.tabMonster[i].c*coefx+sleepOff.xOffset,grille.tabMonster[i].l*coefy+sleepOff.yOffset,imgObject,screen,&clipSleep);
+        }else if (grille.tabMonster[i].type==STANDARD){
+            applySurface(grille.tabMonster[i].c*coefx+initialOff.xOffset,grille.tabMonster[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipAwake);
         }
     }
 }
@@ -208,11 +191,7 @@ void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, o
 * -                                                          *
 *************************************************************/
 
-void anime(level grille, coordGrille posFin2,
-           offset initialOff, SDL_Rect clipAwake,
-           int coefx, int coefy,
-           SDL_Surface *screen, SDL_Surface *imgAwake,
-           int dir, int idMonster){
+void anime(level grille, coordGrille posFin2,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
 
     coordCartesiennes posInit;
     posInit.x=grille.tabMonster[idMonster].c;
@@ -234,36 +213,46 @@ void anime(level grille, coordGrille posFin2,
     // Fin convertion
 
    // Tant que la pos initiale n'a pas atteint la pos finale, ..
+    grille.tabMonster[idMonster].l = -2;
+    grille.tabMonster[idMonster].c = -2;
 
     if(dir==Right){
         while(posInitPixel.x<posFinPixel.x){
-            SDL_Flip(screen);
             posInitPixel.x ++;
-            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+            applySurface(0,0,fondJeu,screen,NULL);
+            showGrid(imgObject,screen,grille);
+            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
+            SDL_Flip(screen);
         }
 
     }else if(dir==Left){
 
         while(posInitPixel.x>posFinPixel.x){
-            SDL_Flip(screen);
             posInitPixel.x --;
-            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+            applySurface(0,0,fondJeu,screen,NULL);
+            showGrid(imgObject,screen,grille);
+            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
+            SDL_Flip(screen);
         }
 
     }else if(dir==Down){
 
         while(posInitPixel.y<posFinPixel.y){
-            SDL_Flip(screen);
             posInitPixel.y ++;
-            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+            applySurface(0,0,fondJeu,screen,NULL);
+            showGrid(imgObject,screen,grille);
+            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
+            SDL_Flip(screen);
         }
 
     }else if(dir==Up){
 
         while(posInitPixel.y>posFinPixel.y){
-            SDL_Flip(screen);
             posInitPixel.y --;
-            applySurface(posInitPixel.x,posInitPixel.y,imgAwake,screen,&clipAwake);
+            applySurface(0,0,fondJeu,screen,NULL);
+            showGrid(imgObject,screen,grille);
+            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
+            SDL_Flip(screen);
         }
     }
 

@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 /****************** Nom de la fonction **********************
 * absoluteValue                                             *
 ******************** Auteur , Dates *************************
@@ -107,22 +106,21 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
 *********************** Sorties *****************************
 * l'indice du monstre détécté -1 sinon                      *
 ************************************************************/
-int hitboxMonster(level grille, coordCartesiennes mouseDown, int coefx, int coefy, int offsetX, int offsetY, int &k)
+int hitboxMonster(level grille, coordCartesiennes mouseDown, int &k)
 {
     int j=-1;
     bool onMonster=false;
 
     if( k<grille.nbMonster && !onMonster )
     {
-        if (    grille.tabMonster[k].l*coefy+offsetY <= mouseDown.y
-                && (grille.tabMonster[k].l+1)*coefy+offsetY >= mouseDown.y
-                && grille.tabMonster[k].c*coefx+offsetX <= mouseDown.x
-                && (grille.tabMonster[k].c+1)*coefx+offsetX >= mouseDown.x
+        if (    grille.tabMonster[k].l*coefy+initialOff.yOffset <= mouseDown.y
+                && (grille.tabMonster[k].l+1)*coefy+initialOff.yOffset >= mouseDown.y
+                && grille.tabMonster[k].c*coefx+initialOff.xOffset <= mouseDown.x
+                && (grille.tabMonster[k].c+1)*coefx+initialOff.xOffset >= mouseDown.x
                 && grille.tabMonster[k].type==STANDARD)
         {
             onMonster=true;
             j=k;
-            cout << "tru" << endl;
         }
         k++;
     }
@@ -170,9 +168,7 @@ coordGrille coefDir(int dir){
 *************************************************************/
 
 
-void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
-                 SDL_Surface *screen, offset initialOff, SDL_Rect clipAwake, SDL_Surface *imgAwake,
-                 int coefx, int coefy){
+void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu){
 
     coordGrille monstre;
     monstre.l=grille.tabMonster[monsterId].l;
@@ -191,18 +187,18 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
             if(grille.tabArrow[i].l==monstre.l+ligneCoef && grille.tabArrow[i].c==monstre.c+colonneCoef){
                 monstre.c=monstre.c+colonneCoef;
                 monstre.l=monstre.l+ligneCoef;
-                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                 dir=grille.tabArrow[i].type;
                 colonneCoef=coefDir(dir).c;
                 ligneCoef=coefDir(dir).l;
                 grille.tabMonster[monsterId].l=monstre.l;
                 grille.tabMonster[monsterId].c=monstre.c;
-                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
             }
         }
 
         if(monstre.l+ligneCoef==TAILLE_LIGNE || monstre.l+ligneCoef==-1 || monstre.c+colonneCoef==TAILLE_COLONNE || monstre.c+colonneCoef==-1){
-            anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+            anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
             outOfGrid=true;
             exit = true;
         }
@@ -211,9 +207,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
         for(int i=0;i<grille.nbMonster;i++){
             if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
                 if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
-//                    monstre.c=monstre.c-colonneCoef;
-//                    monstre.l=monstre.l-ligneCoef;
-                    anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                    anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                     exit = true;
                 }
             }
@@ -221,9 +215,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
                 if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
                     grille.tabMonster[i].type=STANDARD;
                     grille.nbMonsterSleeping --;
-//                    monstre.c=monstre.c-colonneCoef;
-//                    monstre.l=monstre.l-ligneCoef;
-                    anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                    anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                     exit= true;
                 }
             }
@@ -232,10 +224,7 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
         // On vérifie si il y a un mur sur le passage
         for(int i=0;i<grille.nbWall;i++){
             if(grille.tabWall[i].l==monstre.l+ligneCoef && grille.tabWall[i].c==monstre.c+colonneCoef){
-                // On détecte qu'il y a un monstre juste à côté en x (colonne)
-//                monstre.c=monstre.c-colonneCoef;
-//                monstre.l=monstre.l-ligneCoef;
-                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
+                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
@@ -247,10 +236,8 @@ void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid,
                 grille.tabIce[i].l=-1;
                 grille.tabIce[i].c=-1;
                 grille.nbIce --;
-//                monstre.c=monstre.c-colonneCoef;
-//                monstre.l=monstre.l-ligneCoef;
-                anime(grille, monstre,initialOff,clipAwake,coefx,coefy,screen,imgAwake,dir, monsterId);
-               exit = true;
+                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+                exit = true;
             }
         }
         if(!exit){

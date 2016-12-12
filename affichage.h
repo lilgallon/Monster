@@ -1,4 +1,4 @@
-#ifndef _AFFICHAGE_H_
+#ifndef _AFFICHAGE_H
 #define _AFFICHAGE_H_
 
 #include <cstdlib>
@@ -11,6 +11,25 @@
 #include "level.h"
 #include "deplacement.h"
 
+/********************************************
+ * Initialisation pour l'affichage
+ * *******************************************/
+
+const SDL_Rect clipWall{70,68,55,62};
+const SDL_Rect clipIce{9,71,55,62};
+const SDL_Rect clipAwake{16,147,43,45};
+const SDL_Rect clipSleep{0,0,72,64};
+const SDL_Rect clipArrowLeft{159,224,43,38};
+const SDL_Rect clipArrowRight{107,224,43,38};
+const SDL_Rect clipArrowUp{62,224,43,38};
+const SDL_Rect clipArrowDown{15,224,43,38};
+
+const offset initialOff{16,33};
+const offset sleepOff{9,23};
+const offset wallOff{9,25};
+
+const int coefy = 52;
+const int coefx = 60;
 
 /*********************************
  * FONCTIONS D'IMAGES
@@ -20,7 +39,7 @@ SDL_Surface *loadImage( std::string filename );
 /*********************************
  * Fonctions d'application d'images
  * *******************************/
-void applySurface(int x, int y, SDL_Surface* source,SDL_Surface* destination, SDL_Rect* clip);
+void applySurface(int x, int y, SDL_Surface* source, SDL_Surface* destination, const SDL_Rect *clip);
 SDL_Surface * loadImageWithColorKey(std::string filename, int r, int g, int b);
 
 
@@ -35,16 +54,9 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
                    SDL_Rect *overClip, SDL_Rect *defaultClip,
                    SDL_Event event);
 
-void anime(level grille, coordGrille posFin2,
-           offset initialOff, SDL_Rect clipAwake,
-           int coefx, int coefy, SDL_Surface *screen, SDL_Surface *imgAwake,
-           int dir, int idMonster);
+void anime(level grille, coordGrille posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
 
 // Version 3
-void showGrid(offset wallOff, offset iceOff, offset awakeOff, offset sleepOff, offset initialOff, offset arrowOff,
-               int coefx, int coefy,
-               SDL_Surface *imgWall, SDL_Surface *imgIce, SDL_Surface *imgSleep, SDL_Surface *imgAwake, SDL_Surface *screen, SDL_Surface *imgaLeft, SDL_Surface *imgaRight, SDL_Surface *imgaUp, SDL_Surface *imgaDown,
-               SDL_Rect clipWall, SDL_Rect clipIce, SDL_Rect clipSleep, SDL_Rect clipAwake, SDL_Rect clipArrowRight, SDL_Rect clipArrowLeft, SDL_Rect clipArrowDown, SDL_Rect clipArrowUp,
-               level grille);
+void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille);
 
 #endif
