@@ -13,14 +13,14 @@ using namespace std;
 ********************* Description ***************************
 * Supprime une occurence d'un tableau                       *
 *********************** Entrées *****************************
-* LA grille, et l'indice de la glace à effacer              *
+* LA grid, et l'indice de la glace à effacer              *
 *********************** Sorties *****************************
 * -                                                         *
 ************************************************************/
 
-void suppOccIce(level &grille,int idIce){
-    for(int i=0; i<grille.nbIce ; i++){
-        grille.tabIce[idIce+i]=grille.tabIce[idIce+1+i];
+void suppOccIce(level &grid,int idIce){
+    for(int i=0; i<grid.nbIce ; i++){
+        grid.tabIce[idIce+i]=grid.tabIce[idIce+1+i];
     }
 }
 
@@ -119,32 +119,32 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
 ******************** Auteur , Dates *************************
 * Tristan RENAUDON, 09/12/16                                *
 ********************* Description ***************************
-* Deteecte si la souris clique sur un monstre               *
+* Deteecte si la souris clique sur un monster               *
 *********************** Entrées *****************************
-* la grille, les coordonnées de la souris lors d'un clique  *
+* la grid, les coordonnées de la souris lors d'un clique  *
 * la taille x/y d'une case, et l'offset de l'image          *
 *********************** Sorties *****************************
-* l'indice du monstre détécté -1 sinon                      *
+* l'indice du monster détécté -1 sinon                      *
 ************************************************************/
-int hitboxMonster(level grille, coordCartesiennes mouseDown, int &k)
+int hitboxMonster(level grid, coordCartesiennes mouseDown, int &k)
 {
     int j=-1;
     bool onMonster=false;
 
-    if( k<grille.nbMonster && !onMonster )
+    if( k<grid.nbMonster && !onMonster )
     {
-        if (    grille.tabMonster[k].l*coefy+initialOff.yOffset <= mouseDown.y
-                && (grille.tabMonster[k].l+1)*coefy+initialOff.yOffset >= mouseDown.y
-                && grille.tabMonster[k].c*coefx+initialOff.xOffset <= mouseDown.x
-                && (grille.tabMonster[k].c+1)*coefx+initialOff.xOffset >= mouseDown.x
-                && grille.tabMonster[k].type==STANDARD)
+        if (    grid.tabMonster[k].l*coefy+initialOff.yOffset <= mouseDown.y
+                && (grid.tabMonster[k].l+1)*coefy+initialOff.yOffset >= mouseDown.y
+                && grid.tabMonster[k].c*coefx+initialOff.xOffset <= mouseDown.x
+                && (grid.tabMonster[k].c+1)*coefx+initialOff.xOffset >= mouseDown.x
+                && grid.tabMonster[k].type==STANDARD)
         {
             onMonster=true;
             j=k;
         }
         k++;
     }
-    if(k>=grille.nbMonster)
+    if(k>=grid.nbMonster)
     {
         k=0;
     }
@@ -157,15 +157,15 @@ int hitboxMonster(level grille, coordCartesiennes mouseDown, int &k)
 * Lilian GALLON , 09/12/16                                  *
 ********************* Description ***************************
 * Calcule les coefficients en fonction de la direction du   *
-* monstre                                                   *
+* monster                                                   *
 *********************** Entrées *****************************
-* La direction du monstre                                   *
+* La direction du monster                                   *
 *********************** Sorties *****************************
-* Les coefficients de la direction du monstre               *
+* Les coefficients de la direction du monster               *
 *************************************************************/
 
-coordGrille coefDir(int dir){
-    coordGrille coef;
+coordgrid coefDir(int dir){
+    coordgrid coef;
     if(dir==Up){coef.l = -1; coef.c=0;}
     else if(dir==Down){coef.l = 1; coef.c=0;}
     else if(dir==Left){coef.l=0; coef.c=-1;}
@@ -178,99 +178,99 @@ coordGrille coefDir(int dir){
 ******************** Auteur , Dates *************************
 * Lilian GALLON & Tristan Renaudon, 07/12/16                *
 ********************* Description ***************************
-* Met à jour la grille et anime le déplacement d'un monstre *
+* Met à jour la grid et anime le déplacement d'un monster *
 ************************ Entrées ****************************
 * La structure level, la direction choisie,                 *
-* d'id du monstre à déplacer, et une variable indiquant si  *
-* le monstre est sorti de la grille                         *
+* d'id du monster à déplacer, et une variable indiquant si  *
+* le monster est sorti de la grid                         *
 *********************** Sorties *****************************
 * -                                                          *
 *************************************************************/
 
 
-void updateLevel(level &grille,int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu){
+void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu){
 
-    coordGrille monstre;
-    monstre.l=grille.tabMonster[monsterId].l;
-    monstre.c=grille.tabMonster[monsterId].c;
+    coordgrid monster;
+    monster.l=grid.tabMonster[monsterId].l;
+    monster.c=grid.tabMonster[monsterId].c;
     bool exit = false;
-    int ligneCoef;
-    int colonneCoef;
+    int lineCoef;
+    int columnCoef;
 
     // Faire des if pour trouver les coef selon dir
-    colonneCoef=coefDir(dir).c;
-    ligneCoef=coefDir(dir).l;
+    columnCoef=coefDir(dir).c;
+    lineCoef=coefDir(dir).l;
 
     while(!exit){
 
-        for(int i=0;i<grille.nbArrow;i++){
-            if(grille.tabArrow[i].l==monstre.l+ligneCoef && grille.tabArrow[i].c==monstre.c+colonneCoef){
-                monstre.c=monstre.c+colonneCoef;
-                monstre.l=monstre.l+ligneCoef;
-                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
-                dir=grille.tabArrow[i].type;
-                colonneCoef=coefDir(dir).c;
-                ligneCoef=coefDir(dir).l;
-                grille.tabMonster[monsterId].l=monstre.l;
-                grille.tabMonster[monsterId].c=monstre.c;
-                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+        for(int i=0;i<grid.nbArrow;i++){
+            if(grid.tabArrow[i].l==monster.l+lineCoef && grid.tabArrow[i].c==monster.c+columnCoef){
+                monster.c=monster.c+columnCoef;
+                monster.l=monster.l+lineCoef;
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                dir=grid.tabArrow[i].type;
+                columnCoef=coefDir(dir).c;
+                lineCoef=coefDir(dir).l;
+                grid.tabMonster[monsterId].l=monster.l;
+                grid.tabMonster[monsterId].c=monster.c;
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
             }
         }
 
-        if(monstre.l+ligneCoef==TAILLE_LIGNE || monstre.l+ligneCoef==-1 || monstre.c+colonneCoef==TAILLE_COLONNE || monstre.c+colonneCoef==-1){
-            anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+        if(monster.l+lineCoef==TAILLE_LINE || monster.l+lineCoef==-1 || monster.c+columnCoef==TAILLE_COLUMN || monster.c+columnCoef==-1){
+            anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
             outOfGrid=true;
             exit = true;
         }
 
-        // On vérifie si il ya un monstre sur le passage
-        for(int i=0;i<grille.nbMonster+grille.nbMonsterSleeping;i++){
-            if(grille.tabMonster[i].type==STANDARD && monsterId!=i){
-                if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
-                    anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+        // On vérifie si il ya un monster sur le passage
+        for(int i=0;i<grid.nbMonster+grid.nbMonsterSleeping;i++){
+            if(grid.tabMonster[i].type==STANDARD && monsterId!=i){
+                if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
+                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                     exit = true;
                 }
             }
-            if(grille.tabMonster[i].type==SLEEPING && monsterId!=i){
-                if(grille.tabMonster[i].l==monstre.l+ligneCoef && grille.tabMonster[i].c==monstre.c+colonneCoef){
-                    grille.tabMonster[i].type=STANDARD;
-                    grille.nbMonsterSleeping --;
-                    grille.nbMonster ++;
-                    anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+            if(grid.tabMonster[i].type==SLEEPING && monsterId!=i){
+                if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
+                    grid.tabMonster[i].type=STANDARD;
+                    grid.nbMonsterSleeping --;
+                    grid.nbMonster ++;
+                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                     exit= true;
                 }
             }
         }
 
         // On vérifie si il y a un mur sur le passage
-        for(int i=0;i<grille.nbWall;i++){
-            if(grille.tabWall[i].l==monstre.l+ligneCoef && grille.tabWall[i].c==monstre.c+colonneCoef){
-                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+        for(int i=0;i<grid.nbWall;i++){
+            if(grid.tabWall[i].l==monster.l+lineCoef && grid.tabWall[i].c==monster.c+columnCoef){
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
 
-        for(int i=0;i<grille.nbIce;i++){
-            if(grille.tabIce[i].l==monstre.l+ligneCoef && grille.tabIce[i].
-                    c==monstre.c+colonneCoef
-                    && monstre.l==grille.tabMonster[monsterId].l
-                    && monstre.c==grille.tabMonster[monsterId].c){
+        for(int i=0;i<grid.nbIce;i++){
+            if(grid.tabIce[i].l==monster.l+lineCoef && grid.tabIce[i].
+                    c==monster.c+columnCoef
+                    && monster.l==grid.tabMonster[monsterId].l
+                    && monster.c==grid.tabMonster[monsterId].c){
                 exit = true;
 
-            }else if(grille.tabIce[i].l==monstre.l+ligneCoef && grille.tabIce[i].c==monstre.c+colonneCoef){
-                suppOccIce(grille,i);
-                grille.nbIce = grille.nbIce - 1;
-                anime(grille, monstre,screen,imgObject,dir, monsterId,fondJeu);
+            }else if(grid.tabIce[i].l==monster.l+lineCoef && grid.tabIce[i].c==monster.c+columnCoef){
+                suppOccIce(grid,i);
+                grid.nbIce = grid.nbIce - 1;
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
         if(!exit){
-            monstre.c=monstre.c+colonneCoef;
-            monstre.l=monstre.l+ligneCoef;
+            monster.c=monster.c+columnCoef;
+            monster.l=monster.l+lineCoef;
         }
     }
 
-    grille.tabMonster[monsterId].l=monstre.l;
-    grille.tabMonster[monsterId].c=monstre.c;
+    grid.tabMonster[monsterId].l=monster.l;
+    grid.tabMonster[monsterId].c=monster.c;
 
 }

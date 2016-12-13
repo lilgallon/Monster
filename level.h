@@ -6,8 +6,8 @@
 
 const int NB_MAX_OBJECT = 45;
 
-const int TAILLE_LIGNE = 9;
-const int TAILLE_COLONNE = 5;
+const int TAILLE_LINE = 9;
+const int TAILLE_COLUMN = 5;
 
 enum {STANDARD,SLEEPING,DEAD,WALL,ICE};
 
@@ -30,6 +30,6 @@ struct level{
     int nbIce;
 };
 
-void initLevel(int lvl, level & grille);
+void initLevel(int lvl, level & grid);
 
 #endif

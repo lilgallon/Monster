@@ -136,39 +136,39 @@ bool overCircle(int circleX, int circleY, int circleR){
 ******************** Auteur , Dates *************************
 * Lilian GALLON  20/11/16                                   *
 ********************* Description ***************************
-* Permet d'afficher la grille avec les images               *
+* Permet d'afficher la grid avec les images               *
 *********************** Entrées *****************************
 * Les images, le décalages des images, le clip de chaque    *
-* image, et la grilleLevel                                  *
+* image, et la gridLevel                                  *
 *********************** Sorties *****************************
 * -                                                          *
 * ***********************************************************/
 
-void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille){
+void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid){
 
 
-    for(int i=0; i<grille.nbIce ; i++){
-        applySurface(grille.tabIce[i].c*coefx+initialOff.xOffset,grille.tabIce[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipIce);
+    for(int i=0; i<grid.nbIce ; i++){
+        applySurface(grid.tabIce[i].c*coefx+initialOff.xOffset,grid.tabIce[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipIce);
     }
-    for(int i=0; i<grille.nbWall; i++){
-        applySurface(grille.tabWall[i].c*coefx+wallOff.xOffset,grille.tabWall[i].l*coefy+wallOff.yOffset,imgObject,screen,&clipWall);
+    for(int i=0; i<grid.nbWall; i++){
+        applySurface(grid.tabWall[i].c*coefx+wallOff.xOffset,grid.tabWall[i].l*coefy+wallOff.yOffset,imgObject,screen,&clipWall);
     }
-    for(int i=0; i<grille.nbArrow; i++){
-        if(grille.tabArrow[i].type==Left){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowLeft);
-        }else if(grille.tabArrow[i].type==Up){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowUp);
-        }else if(grille.tabArrow[i].type==Down){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowDown);
-        }else if(grille.tabArrow[i].type==Right){
-        applySurface(grille.tabArrow[i].c*coefx+initialOff.xOffset,grille.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowRight);
+    for(int i=0; i<grid.nbArrow; i++){
+        if(grid.tabArrow[i].type==Left){
+        applySurface(grid.tabArrow[i].c*coefx+initialOff.xOffset,grid.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowLeft);
+        }else if(grid.tabArrow[i].type==Up){
+        applySurface(grid.tabArrow[i].c*coefx+initialOff.xOffset,grid.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowUp);
+        }else if(grid.tabArrow[i].type==Down){
+        applySurface(grid.tabArrow[i].c*coefx+initialOff.xOffset,grid.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowDown);
+        }else if(grid.tabArrow[i].type==Right){
+        applySurface(grid.tabArrow[i].c*coefx+initialOff.xOffset,grid.tabArrow[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipArrowRight);
         }
     }
-    for(int i=0; i<grille.nbMonster+grille.nbMonsterSleeping ; i ++){
-        if(grille.tabMonster[i].type==SLEEPING){
-            applySurface(grille.tabMonster[i].c*coefx+sleepOff.xOffset,grille.tabMonster[i].l*coefy+sleepOff.yOffset,imgObject,screen,&clipSleep);
-        }else if (grille.tabMonster[i].type==STANDARD){
-            applySurface(grille.tabMonster[i].c*coefx+initialOff.xOffset,grille.tabMonster[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipAwake);
+    for(int i=0; i<grid.nbMonster+grid.nbMonsterSleeping ; i ++){
+        if(grid.tabMonster[i].type==SLEEPING){
+            applySurface(grid.tabMonster[i].c*coefx+sleepOff.xOffset,grid.tabMonster[i].l*coefy+sleepOff.yOffset,imgObject,screen,&clipSleep);
+        }else if (grid.tabMonster[i].type==STANDARD){
+            applySurface(grid.tabMonster[i].c*coefx+initialOff.xOffset,grid.tabMonster[i].l*coefy+initialOff.yOffset,imgObject,screen,&clipAwake);
         }
     }
 }
@@ -181,75 +181,75 @@ void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille){
 * Anime un objet à partir de sa position initiale et de sa  *
 * position finale                                           *
 ************************ Entrées ****************************
-* le niveau (grille), la position finale, la position       *
+* le niveau (grid), la position finale, la position       *
 * initiale, le clip du monstre, le coef x et y (longeur et  *
-* hauteur d'une case de la grille, le décalage initial,     *
-* car al grille commence pas à 0,0, l'id du monstre qui va  *
+* hauteur d'une case de la grid, le décalage initial,     *
+* car al grid commence pas à 0,0, l'id du monstre qui va  *
 * etre animé, et la direction                               *
 *********************** Sorties *****************************
 * -                                                          *
 *************************************************************/
 
-void anime(level grille, coordGrille posFin2,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
+void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
 
     coordCartesiennes posInit;
-    posInit.x=grille.tabMonster[idMonster].c;
-    posInit.y=grille.tabMonster[idMonster].l;
+    posInit.x=grid.tabMonster[idMonster].c;
+    posInit.y=grid.tabMonster[idMonster].l;
 
-    coordCartesiennes posFin;
-    posFin.x=posFin2.c;
-    posFin.y=posFin2.l;
+    coordCartesiennes posArrival;
+    posArrival.x=posArrivalGrid.c;
+    posArrival.y=posArrivalGrid.l;
 
 
-    // Convertir lignes et colonnes en pixel
+    // Convertir lines et columns en pixel
     coordCartesiennes posInitPixel;
     posInitPixel.x=posInit.x*coefx+initialOff.xOffset;
     posInitPixel.y=posInit.y*coefy+initialOff.yOffset;
 
-    coordCartesiennes posFinPixel;
-    posFinPixel.x=posFin.x*coefx+initialOff.xOffset;
-    posFinPixel.y=posFin.y*coefy+initialOff.yOffset;
+    coordCartesiennes posArrivalPixel;
+    posArrivalPixel.x=posArrival.x*coefx+initialOff.xOffset;
+    posArrivalPixel.y=posArrival.y*coefy+initialOff.yOffset;
     // Fin convertion
 
    // Tant que la pos initiale n'a pas atteint la pos finale, ..
-    grille.tabMonster[idMonster].l = -2;
-    grille.tabMonster[idMonster].c = -2;
+    grid.tabMonster[idMonster].l = -2;
+    grid.tabMonster[idMonster].c = -2;
 
     if(dir==Right){
-        while(posInitPixel.x<posFinPixel.x){
+        while(posInitPixel.x<posArrivalPixel.x){
             posInitPixel.x ++;
             applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grille);
+            showGrid(imgObject,screen,grid);
             applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
             SDL_Flip(screen);
         }
 
     }else if(dir==Left){
 
-        while(posInitPixel.x>posFinPixel.x){
+        while(posInitPixel.x>posArrivalPixel.x){
             posInitPixel.x --;
             applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grille);
+            showGrid(imgObject,screen,grid);
             applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
             SDL_Flip(screen);
         }
 
     }else if(dir==Down){
 
-        while(posInitPixel.y<posFinPixel.y){
+        while(posInitPixel.y<posArrivalPixel.y){
             posInitPixel.y ++;
             applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grille);
+            showGrid(imgObject,screen,grid);
             applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
             SDL_Flip(screen);
         }
 
     }else if(dir==Up){
 
-        while(posInitPixel.y>posFinPixel.y){
+        while(posInitPixel.y>posArrivalPixel.y){
             posInitPixel.y --;
             applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grille);
+            showGrid(imgObject,screen,grid);
             applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
             SDL_Flip(screen);
         }

@@ -14,13 +14,13 @@
 
 using namespace std;
 
-const int BOUTON_RAYON=50;
-const int BOUTON_MIDDLE_X=92+BOUTON_RAYON ;
-const int BOUTON_MIDDLE_Y=256+BOUTON_RAYON;
+const int BUTTON_RADIUS=50;
+const int BOUTON_MIDDLE_X=92+BUTTON_RADIUS ;
+const int BOUTON_MIDDLE_Y=256+BUTTON_RADIUS;
 
-const int ECRAN_WIDTH = 320;
-const int ECRAN_HEIGHT = 568;
-const int ECRAN_BPP = 32;
+const int SCREEN_WIDTH = 320;
+const int SCREEN_HEIGHT = 568;
+const int SCREEN_BPP = 32;
 const int NB_LEVEL = 6;
 
 enum {Menu,Play,GameOver};
@@ -35,30 +35,30 @@ int main()
     /****************************************
      * Initialisation pour les images
      * **************************************/
-    SDL_Surface *fondAccueil1, *fondAccueil2;
-    SDL_Surface *fondJeu;
+    SDL_Surface *backgroundHomeDefault, *backgroundHomeAlternative;
+    SDL_Surface *backgroundInGame;
     SDL_Surface *screen;
     SDL_Surface *imgObject;
     SDL_Surface *transition, *endgame;
 
-    screen=SDL_SetVideoMode(ECRAN_WIDTH,ECRAN_HEIGHT,ECRAN_BPP,SDL_SWSURFACE);
+    screen=SDL_SetVideoMode(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_BPP,SDL_SWSURFACE);
 
-    fondJeu=loadImage("background.bmp");
-    fondAccueil1=loadImage("menu.bmp");
-    fondAccueil2=loadImage("menu_play.bmp");
+    backgroundInGame=loadImage("background.bmp");
+    backgroundHomeDefault=loadImage("menu.bmp");
+    backgroundHomeAlternative=loadImage("menu_play.bmp");
     imgObject = loadImageWithColorKey("sprite.bmp",255,255,255);
     transition = loadImage("winSprite.bmp");
     endgame = loadImage("winEndSprite.bmp");
 
 
     /**************************************
-     * Initialisations liées à la grille et au lvl
+     * Initialisations liées à la grid et au lvl
      * ************************************/
 
     // Version 3
     int lvl = 1;
-    level grille;
-    initLevel(lvl,grille);
+    level grid;
+    initLevel(lvl,grid);
 
     /****************************************
      * Autres initialisations
@@ -66,12 +66,13 @@ int main()
 
     SDL_Event event, eventM;
     coordCartesiennes mouseDown, mouseDownReleased, swipe;
-    int Etat_Jeu=Menu;
+    int Game_State=Menu;
     bool quit = false;
     int dir = Null;
     bool outOfGrid=false;
 
-    int j = 0;
+    int monsterId = -1;
+    // FAut donner un nom au k
     int k = 0;
 
 
@@ -79,7 +80,7 @@ int main()
     while (!quit){
         SDL_Flip(screen);
 
-        switch(Etat_Jeu){
+        switch(Game_State){
         case Menu:
 
             while(SDL_PollEvent(&event)){
@@ -89,15 +90,15 @@ int main()
             if(event.type==SDL_QUIT){
                 quit=true;
             }
-            if(dynamicButton(fondAccueil2,fondAccueil1,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BOUTON_RAYON,0,0,0,0,NULL,NULL,event)){
-                Etat_Jeu=Play;
+            if(dynamicButton(backgroundHomeAlternative,backgroundHomeDefault,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BUTTON_RADIUS,0,0,0,0,NULL,NULL,event)){
+                Game_State=Play;
             }
 
             break;
 
         case Play:
 
-            applySurface(0,0,fondJeu,screen,NULL);
+            applySurface(0,0,backgroundInGame,screen,NULL);
 
             while (SDL_PollEvent(&eventM)){
 
@@ -109,36 +110,35 @@ int main()
 
             // Version 3
 
-            showGrid(imgObject,screen,grille);
+            showGrid(imgObject,screen,grid);
 
             dir=direction(eventM,mouseDown,mouseDownReleased,swipe);
-            j=hitboxMonster(grille,mouseDown,k);
+            monsterId=hitboxMonster(grid,mouseDown,k);
 
-            if(dir != Null && j!= -1)
+            if(dir != Null && monsterId!= -1)
             {
-                updateLevel(grille,j,dir,outOfGrid,screen,imgObject,fondJeu);
+                updateLevel(grid,monsterId,dir,outOfGrid,screen,imgObject,backgroundInGame);
                 dir = Null;
             }
             if(overCircle(93,531,26)){
-                initLevel(lvl,grille);
+                initLevel(lvl,grid);
             }
 
-            if(grille.nbMonsterSleeping==0){
+            if(grid.nbMonsterSleeping==0){
 
                 lvl ++;
                 if(lvl>NB_LEVEL){
-                    Etat_Jeu=GameOver;
+                    Game_State=GameOver;
                 }else{
                     applySurface(0,0,transition,screen,NULL);
                     SDL_Flip(screen);
                     dir = Null;
                     SDL_Delay(1000);
-                    initLevel(lvl,grille);
+                    initLevel(lvl,grid);
                 }
 
             }else if(outOfGrid){
-                cout << "out" << endl;
-                initLevel(lvl,grille);
+                initLevel(lvl,grid);
             }
 
 
@@ -164,9 +164,9 @@ int main()
 
     SDL_FreeSurface(screen);
     SDL_FreeSurface(imgObject);
-    SDL_FreeSurface(fondAccueil1);
-    SDL_FreeSurface(fondAccueil2);
-    SDL_FreeSurface(fondJeu);
+    SDL_FreeSurface(backgroundHomeDefault);
+    SDL_FreeSurface(backgroundHomeAlternative);
+    SDL_FreeSurface(backgroundInGame);
 
     return 0;
 }

@@ -54,9 +54,9 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
                    SDL_Rect *overClip, SDL_Rect *defaultClip,
                    SDL_Event event);
 
-void anime(level grille, coordGrille posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
+void anime(level grid, coordgrid posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
 
 // Version 3
-void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grille);
+void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid);
 
 #endif

@@ -11,7 +11,7 @@ struct coordCartesiennes{
     int y;
 };
 
-struct coordGrille{
+struct coordgrid{
     int l;
     int c;
 };
@@ -24,9 +24,9 @@ struct offset{
 enum {Null, Left, Right, Up, Down};
 
 int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes mouseDownReleased, coordCartesiennes swipe);
-void updateLevel(level &grille, int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu);
-int hitboxMonster(level grille, coordCartesiennes mouse, int &k);
+void updateLevel(level &grid, int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu);
+int hitboxMonster(level grid, coordCartesiennes mouse, int &k);
 
-void suppOccIce(level &grille,int idIce);
+void suppOccIce(level &grid,int idIce);
 
 #endif
