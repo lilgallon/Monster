@@ -8,8 +8,8 @@
 #include <array>
 
 #include "level.h"
-#include "affichage.h"
-#include "deplacement.h"
+#include "display.h"
+#include "movement.h"
 
 
 using namespace std;
