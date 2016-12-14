@@ -1,4 +1,4 @@
-#include "affichage.h"
+#include "display.h"
 #include "level.h"
 
 #include <iostream>
@@ -9,7 +9,6 @@
 
 #include <string>
 
-#include "deplacement.h"
 
 using namespace std;
 
@@ -192,31 +191,34 @@ void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid){
 
 void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
 
-    coordCartesiennes posInit;
+    coordCartesian posInit;
     posInit.x=grid.tabMonster[idMonster].c;
     posInit.y=grid.tabMonster[idMonster].l;
 
-    coordCartesiennes posArrival;
+    coordCartesian posArrival;
     posArrival.x=posArrivalGrid.c;
     posArrival.y=posArrivalGrid.l;
 
 
     // Convertir lines et columns en pixel
-    coordCartesiennes posInitPixel;
+    coordCartesian posInitPixel;
     posInitPixel.x=posInit.x*coefx+initialOff.xOffset;
     posInitPixel.y=posInit.y*coefy+initialOff.yOffset;
 
-    coordCartesiennes posArrivalPixel;
+    coordCartesian posArrivalPixel;
     posArrivalPixel.x=posArrival.x*coefx+initialOff.xOffset;
     posArrivalPixel.y=posArrival.y*coefy+initialOff.yOffset;
     // Fin convertion
 
    // Tant que la pos initiale n'a pas atteint la pos finale, ..
+
+    // HIde the monster
     grid.tabMonster[idMonster].l = -2;
     grid.tabMonster[idMonster].c = -2;
 
     if(dir==Right){
         while(posInitPixel.x<posArrivalPixel.x){
+            SDL_Delay(2);
             posInitPixel.x ++;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
@@ -227,6 +229,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Left){
 
         while(posInitPixel.x>posArrivalPixel.x){
+            SDL_Delay(2);
             posInitPixel.x --;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
@@ -237,6 +240,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Down){
 
         while(posInitPixel.y<posArrivalPixel.y){
+            SDL_Delay(2);
             posInitPixel.y ++;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
@@ -247,6 +251,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Up){
 
         while(posInitPixel.y>posArrivalPixel.y){
+            SDL_Delay(2);
             posInitPixel.y --;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);

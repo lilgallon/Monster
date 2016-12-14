@@ -1,12 +1,12 @@
-#ifndef DEPLACEMENT_H
-#define DEPLACEMENT_H
+#ifndef MOVEMENT_H
+#define MOVEMENT_H
 #include <SDL/SDL.h>
 #include "level.h"
 
 int absoluteValue(int val);
 
 
-struct coordCartesiennes{
+struct coordCartesian{
     int x;
     int y;
 };
@@ -23,9 +23,9 @@ struct offset{
 
 enum {Null, Left, Right, Up, Down};
 
-int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes mouseDownReleased, coordCartesiennes swipe);
+int direction(SDL_Event &eventM, coordCartesian &mouseDown, coordCartesian mouseDownReleased, coordCartesian swipe);
 void updateLevel(level &grid, int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu);
-int hitboxMonster(level grid, coordCartesiennes mouse, int &k);
+int hitboxMonster(level grid, coordCartesian mouse, int &k);
 
 void suppOccIce(level &grid,int idIce);
 

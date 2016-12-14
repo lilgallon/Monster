@@ -65,14 +65,14 @@ int main()
      * **************************************/
 
     SDL_Event event, eventM;
-    coordCartesiennes mouseDown, mouseDownReleased, swipe;
+    coordCartesian mouseDown, mouseDownReleased, swipe;
     int Game_State=Menu;
     bool quit = false;
     int dir = Null;
     bool outOfGrid=false;
 
     int monsterId = -1;
-    // FAut donner un nom au k
+    // k est un incrément comme i pourrait l'etre
     int k = 0;
 
 
@@ -124,8 +124,12 @@ int main()
                 initLevel(lvl,grid);
             }
 
-            if(grid.nbMonsterSleeping==0){
 
+            if(grid.nbMonsterSleeping==0){
+                applySurface(0,0,backgroundInGame,screen,NULL);
+                showGrid(imgObject,screen,grid);
+                SDL_Flip(screen);
+                SDL_Delay(200);
                 lvl ++;
                 if(lvl>NB_LEVEL){
                     Game_State=GameOver;

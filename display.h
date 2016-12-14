@@ -1,5 +1,5 @@
-#ifndef _AFFICHAGE_H
-#define _AFFICHAGE_H_
+#ifndef _DISPLAY_H
+#define _DIPLAY_H_
 
 #include <cstdlib>
 #include <SDL/SDL.h>
@@ -9,7 +9,7 @@
 #include <string>
 
 #include "level.h"
-#include "deplacement.h"
+#include "movement.h"
 
 /********************************************
  * Initialisation pour l'affichage

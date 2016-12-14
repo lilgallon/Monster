@@ -9,15 +9,15 @@ INCLUDEPATH+=-I/usr/include/SDL/
 QMAKE_CXXFLAGS += -std=c++11 -pedantic -Wall -Wextra
 SOURCES += \
     level.cc \
-    affichage.cc \
     main.cc \
-    deplacement.cpp
+    movement.cpp \
+    display.cc
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     level.h \
-    affichage.h \
-    deplacement.h
+    movement.h \
+    display.h
 

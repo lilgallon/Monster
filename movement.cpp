@@ -1,8 +1,8 @@
 #include <SDL/SDL.h>
 #include <iostream>
-#include "deplacement.h"
+#include "movement.h"
 #include "level.h"
-#include "affichage.h"
+#include "display.h"
 
 using namespace std;
 
@@ -59,7 +59,7 @@ int absoluteValue(int val)
 *********************** Sorties *****************************
 * Direction choisie                                         *
 ************************************************************/
-int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes mouseDownReleased, coordCartesiennes swipe)
+int direction(SDL_Event &eventM, coordCartesian &mouseDown, coordCartesian mouseDownReleased, coordCartesian swipe)
 {
     if (eventM.type == SDL_MOUSEBUTTONDOWN){
         if (eventM.button.button==SDL_BUTTON_LEFT)
@@ -126,7 +126,7 @@ int direction(SDL_Event &eventM, coordCartesiennes &mouseDown, coordCartesiennes
 *********************** Sorties *****************************
 * l'indice du monster détécté -1 sinon                      *
 ************************************************************/
-int hitboxMonster(level grid, coordCartesiennes mouseDown, int &k)
+int hitboxMonster(level grid, coordCartesian mouseDown, int &k)
 {
     int j=-1;
     bool onMonster=false;
@@ -227,17 +227,17 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
         for(int i=0;i<grid.nbMonster+grid.nbMonsterSleeping;i++){
             if(grid.tabMonster[i].type==STANDARD && monsterId!=i){
                 if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
-                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-                    exit = true;
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                exit = true;
                 }
             }
             if(grid.tabMonster[i].type==SLEEPING && monsterId!=i){
                 if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
+                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                     grid.tabMonster[i].type=STANDARD;
                     grid.nbMonsterSleeping --;
                     grid.nbMonster ++;
-                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-                    exit= true;
+                    exit = true;
                 }
             }
         }
@@ -256,11 +256,10 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
                     && monster.l==grid.tabMonster[monsterId].l
                     && monster.c==grid.tabMonster[monsterId].c){
                 exit = true;
-
             }else if(grid.tabIce[i].l==monster.l+lineCoef && grid.tabIce[i].c==monster.c+columnCoef){
+                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 suppOccIce(grid,i);
                 grid.nbIce = grid.nbIce - 1;
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
@@ -272,5 +271,6 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
 
     grid.tabMonster[monsterId].l=monster.l;
     grid.tabMonster[monsterId].c=monster.c;
+
 
 }
