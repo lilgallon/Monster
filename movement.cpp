@@ -1,5 +1,4 @@
 #include <SDL/SDL.h>
-#include <iostream>
 #include "movement.h"
 #include "level.h"
 #include "display.h"

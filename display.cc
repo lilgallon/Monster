@@ -1,7 +1,6 @@
 #include "display.h"
 #include "level.h"
 
-#include <iostream>
 
 #include <cstdlib>
 #include <SDL/SDL.h>

@@ -1,5 +1,6 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
+
 #include <SDL/SDL.h>
 #include "level.h"
 
