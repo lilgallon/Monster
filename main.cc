@@ -1,6 +1,3 @@
-#include <iostream>
-#include <sstream>
-
 #include <cstdlib>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
