@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-
 #include <array>
 
 #include "level.h"
@@ -165,6 +164,8 @@ int main()
     SDL_FreeSurface(backgroundHomeDefault);
     SDL_FreeSurface(backgroundHomeAlternative);
     SDL_FreeSurface(backgroundInGame);
+    SDL_FreeSurface(transition);
+    SDL_FreeSurface(endgame);
 
     return 0;
 }

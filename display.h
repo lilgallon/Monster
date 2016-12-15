@@ -4,8 +4,6 @@
 #include <cstdlib>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-
-#include <iostream>
 #include <string>
 
 #include "level.h"
@@ -30,6 +28,13 @@ const offset wallOff{9,25};
 
 const int coefy = 52;
 const int coefx = 60;
+
+// Delay for the animation
+// 0 = very fast animation
+// 1 = fast animation
+// 2 = smooth animation
+// The value is in miliseconds
+const int DELAY = 2;
 
 /*********************************
  * Image functions

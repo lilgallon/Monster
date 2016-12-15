@@ -227,7 +227,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     if(dir==Right){
         while(posInitPixel.x<posArrivalPixel.x){
             // A little delay to get a smoother animation
-            SDL_Delay(2);
+            SDL_Delay(DELAY);
             // The x position of the monster will increments because it goes right
             posInitPixel.x ++;
             // Clear the screen by displaying the level, and the background
@@ -243,7 +243,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Left){
 
         while(posInitPixel.x>posArrivalPixel.x){
-            SDL_Delay(2);
+            SDL_Delay(DELAY);
             posInitPixel.x --;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
@@ -254,7 +254,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Down){
 
         while(posInitPixel.y<posArrivalPixel.y){
-            SDL_Delay(2);
+            SDL_Delay(DELAY);
             posInitPixel.y ++;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
@@ -265,7 +265,7 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     }else if(dir==Up){
 
         while(posInitPixel.y>posArrivalPixel.y){
-            SDL_Delay(2);
+            SDL_Delay(DELAY);
             posInitPixel.y --;
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
