@@ -1,4 +1,6 @@
+// SDL Library
 #include <SDL/SDL.h>
+
 #include "movement.h"
 #include "level.h"
 #include "display.h"
@@ -190,7 +192,7 @@ coordgrid coefDir(int dir){
 ********************* Description ***************************
 * Updates the grid according to the direction of the monster*
 * and animates the movement the monster to move             *
-* Met à jour la grid et anime le déplacement d'un monster   *
+* Met à jour la grid et animate le déplacement d'un monster   *
 ************************ Entries ****************************
 * The level, the index of the monster to moven the direction*
 * a variable which returns true if the monster is out of the*
@@ -216,6 +218,8 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
     monster.c=grid.aryMonster[monsterId].c;
 
     while(!exit){
+
+
         // Browses the arrows' array
         for(int i=0;i<grid.nbArrow;i++){
             // If we find an arrow in the next cell
@@ -226,7 +230,7 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
                 // Then, we animate the movement according to :
                 // The initial position: grid.aryMonster[monsterId].l/c:
                 // The final position: monster.l/c
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 // Then we change the direction
                 dir=grid.aryArrow[i].type;
                 // By changing the steps
@@ -237,15 +241,6 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
                 grid.aryMonster[monsterId].c=monster.c;
             }
         }
-        // If the next cell of the monster is out of the grid
-        if(monster.l+lineCoef==LINE_SIZE || monster.l+lineCoef==-1 || monster.c+columnCoef==COLUMN_SIZE || monster.c+columnCoef==-1){
-            // We animate the movement
-            anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-            // We set that the monster is out of the grid
-            outOfGrid=true;
-            // We go out of the while loop
-            exit = true;
-        }
 
         // Browses the monsters's array
         for(int i=0;i<grid.nbMonster+grid.nbMonsterSleeping;i++){
@@ -254,15 +249,15 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
             if(grid.aryMonster[i].type==STANDARD){
                 // If it is a standard monster, we just stop the movement, and we animate the monster
                 if(grid.aryMonster[i].l==monster.l+lineCoef && grid.aryMonster[i].c==monster.c+columnCoef){
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-                exit = true;
+                    animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                    exit = true;
                 }
             }
             if(grid.aryMonster[i].type==SLEEPING){
                 // If it is a sleepong monster, we update the type of the monster to a "standard" one
                 if(grid.aryMonster[i].l==monster.l+lineCoef && grid.aryMonster[i].c==monster.c+columnCoef){
                     // We animate before updating the level
-                    anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                    animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                     // We set the monster to a standard one
                     grid.aryMonster[i].type=STANDARD;
                     // We remove one monster sleeping
@@ -274,10 +269,20 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
             }
         }
 
+        // If the next cell of the monster is out of the grid
+        if(monster.l+lineCoef==LINE_SIZE || monster.l+lineCoef==-1 || monster.c+columnCoef==COLUMN_SIZE || monster.c+columnCoef==-1){
+            // We animate the movement
+            animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+            // We set that the monster is out of the grid
+            outOfGrid=true;
+            // We go out of the while loop
+            exit = true;
+        }
+
         // If there is a wall, we stop it
         for(int i=0;i<grid.nbWall;i++){
             if(grid.aryWall[i].l==monster.l+lineCoef && grid.aryWall[i].c==monster.c+columnCoef){
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
@@ -293,10 +298,10 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
                     && monster.l==grid.aryMonster[monsterId].l
                     && monster.c==grid.aryMonster[monsterId].c){
                 exit = true;
-            // otherwise, if the monster already moved and we find an ice block
+                // otherwise, if the monster already moved and we find an ice block
             }else if(grid.aryIce[i].l==monster.l+lineCoef && grid.aryIce[i].c==monster.c+columnCoef){
                 // We animate the movement
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                animate(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 // We delete an ice from its array
                 suppOccIce(grid,i);
                 // We remove one ice from the total number of ice
@@ -308,6 +313,31 @@ void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surfac
         if(!exit){
             monster.c=monster.c+columnCoef;
             monster.l=monster.l+lineCoef;
+        }
+    }
+
+    // If the monster moved, it will check if there are monsters sleeping next to him
+    // if so, it will update those to the state of "STANDARD" instead of "SLEEPING"
+    if (grid.aryMonster[monsterId].l!=monster.l || grid.aryMonster[monsterId].c!=monster.c){
+        coordgrid step;
+        // Browses enum : Left, Right, Up, Down
+        for(int i = Left; i != Down; i++ ){
+            // Get differents steps according to the direction
+            step.c=coefDir(i).c;
+            step.l=coefDir(i).l;
+            // Browses the array of the monsters
+            for(int j=0; j<grid.nbMonster+grid.nbMonsterSleeping;j++){
+                // It checks if there is a monster sleeping next to him
+                if (grid.aryMonster[j].l==monster.l+step.l && grid.aryMonster[j].c==monster.c+step.c
+                        && grid.aryMonster[j].type==SLEEPING){
+                    // We set the monster to a standard one
+                    grid.aryMonster[j].type=STANDARD;
+                    // We remove one monster sleeping
+                    grid.nbMonsterSleeping --;
+                    // And we add one more normal
+                    grid.nbMonster ++;
+                }
+            }
         }
     }
 

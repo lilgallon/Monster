@@ -1,8 +1,14 @@
+// used for the "NULL" value
 #include <cstdlib>
+
+// The SDL library
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+
+// For the arrays
 #include <array>
 
+// Local files
 #include "level.h"
 #include "display.h"
 #include "movement.h"
@@ -17,7 +23,7 @@ const int BOUTON_MIDDLE_Y=256+BUTTON_RADIUS;
 const int SCREEN_WIDTH = 320;
 const int SCREEN_HEIGHT = 568;
 const int SCREEN_BPP = 32;
-const int NB_LEVEL = 6;
+const int NB_LEVEL = 7;
 
 enum {Menu,Play,GameOver};
 
@@ -29,7 +35,7 @@ int main()
     SDL_Init(SDL_INIT_EVERYTHING);
 
     /****************************************
-     * Initialisation pour les images
+     * Images initializations
      * **************************************/
     SDL_Surface *backgroundHomeDefault, *backgroundHomeAlternative;
     SDL_Surface *backgroundInGame;
@@ -48,42 +54,42 @@ int main()
 
 
     /**************************************
-     * Initialisations liées à la grid et au lvl
+     * Initializations linked to the level
      * ************************************/
     int lvl = 1;
     level grid;
     initLevel(lvl,grid);
 
     /****************************************
-     * Autres initialisations
+     * Other initializations
      * **************************************/
 
-    SDL_Event event, eventM;
+    SDL_Event eventM;
     coordCartesian mouseDown, mouseDownReleased, swipe;
     int Game_State=Menu;
     bool quit = false;
     int dir = Null;
     bool outOfGrid=false;
+
     int monsterId = -1;
-    // k est un incrément comme i pourrait l'etre
+    // k is used for the loop inside the function "hitbox monster"
     int k = 0;
 
 
 
     while (!quit){
-        SDL_Flip(screen);
 
         switch(Game_State){
         case Menu:
 
-            while(SDL_PollEvent(&event)){}
+            while(SDL_PollEvent(&eventM)){}
 
-            if(event.type==SDL_QUIT){
+            if(eventM.type==SDL_QUIT){
                 quit=true;
             }
 
             // If we click on the dynamic button, the game state changes to "play"
-            if(dynamicButton(backgroundHomeAlternative,backgroundHomeDefault,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BUTTON_RADIUS,0,0,0,0,NULL,NULL,event)){
+            if(dynamicButton(backgroundHomeAlternative,backgroundHomeDefault,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BUTTON_RADIUS,0,0,0,0,NULL,NULL,eventM)){
                 Game_State=Play;
             }
 
@@ -138,6 +144,7 @@ int main()
             // Otherwise, the level initialize itself (when the monster is out of the grid)
             }else if(outOfGrid){
                 initLevel(lvl,grid);
+                outOfGrid = false;
             }
 
 
@@ -148,7 +155,6 @@ int main()
             while (SDL_PollEvent(&eventM)){}
 
             applySurface(0,0,endgame,screen,NULL);
-            SDL_Flip(screen);
 
             if(eventM.type==SDL_QUIT){
                 quit=true;
@@ -156,6 +162,7 @@ int main()
 
             break;
         }
+        SDL_Flip(screen);
 
     }
 

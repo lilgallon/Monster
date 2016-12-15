@@ -1,9 +1,14 @@
 #include "display.h"
 #include "level.h"
 
+// To use the NULL value
 #include <cstdlib>
+
+// SDL Libraries
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+
+// To load the filename of the images
 #include <string>
 
 using namespace std;
@@ -184,7 +189,7 @@ void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid){
 /****************** Function's name *************************
 * anime                                                     *
 ******************** Authors , Dates ************************
-* Lilian GALLON,  09/12/16                                  *
+* Lilian GALLON & Tristan RENAUDON,  15/12/16               *
 ********************* Description ***************************
 * Animates an object according to its initial position and  *
 * its final position                                        *
@@ -197,7 +202,8 @@ void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid){
 * -                                                          *
 *************************************************************/
 
-void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
+void animate(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface *imgObject,int dir, int idMonster, SDL_Surface *fondJeu){
+
 
     coordCartesian posInit;
     posInit.x=grid.aryMonster[idMonster].c;
@@ -218,58 +224,61 @@ void anime(level grid, coordgrid posArrivalGrid,SDL_Surface *screen, SDL_Surface
     posArrivalPixel.y=posArrival.y*coefy+initialOff.yOffset;
     // End of conversion
 
+
     // Hide the monster that will be animated
     grid.aryMonster[idMonster].l = -2;
     grid.aryMonster[idMonster].c = -2;
 
-    // According to the direction, the monster be displayed with different
-    // x and y positions
-    if(dir==Right){
-        while(posInitPixel.x<posArrivalPixel.x){
+
+    int dynamicPosInit,dynamicPosArrival;
+    int dist;
+    int i;
+
+    if(dir==Left){
+        dynamicPosInit = posInitPixel.x;
+        dynamicPosArrival = posArrivalPixel.x;
+        i = -1;
+    }else if(dir == Right){
+        dynamicPosInit = posInitPixel.x;
+        dynamicPosArrival = posArrivalPixel.x;
+        i = 1;
+    }else if(dir == Up){
+        dynamicPosInit = posInitPixel.y;
+        dynamicPosArrival = posArrivalPixel.y;
+        i = -1;
+    }else if(dir == Down){
+        dynamicPosInit = posInitPixel.y;
+        dynamicPosArrival = posArrivalPixel.y;
+        i = 1;
+    }
+
+    if(dir !=Null){
+        dist = abs(dynamicPosArrival-dynamicPosInit);
+        for (int k=0; k<dist; k ++){
             // A little delay to get a smoother animation
             SDL_Delay(DELAY);
-            // The x position of the monster will increments because it goes right
-            posInitPixel.x ++;
+
+            // The position of the monster will increments or decrements according
+            // to the direction
+            dynamicPosInit = dynamicPosInit + i;
+
             // Clear the screen by displaying the level, and the background
             applySurface(0,0,fondJeu,screen,NULL);
             showGrid(imgObject,screen,grid);
             // End of the screen clear
+
             // Applies the image of the monster
-            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
+            if(dir == Left || dir == Right)
+            {
+                applySurface(dynamicPosInit,posInitPixel.y,imgObject,screen,&clipAwake);
+
+            }
+            else
+            {
+                applySurface(posInitPixel.x,dynamicPosInit,imgObject,screen,&clipAwake);
+
+            }
             // Displays everything
-            SDL_Flip(screen);
-        }
-    // Same instructions, but the condition changes because of the direction
-    }else if(dir==Left){
-
-        while(posInitPixel.x>posArrivalPixel.x){
-            SDL_Delay(DELAY);
-            posInitPixel.x --;
-            applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grid);
-            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
-            SDL_Flip(screen);
-        }
-
-    }else if(dir==Down){
-
-        while(posInitPixel.y<posArrivalPixel.y){
-            SDL_Delay(DELAY);
-            posInitPixel.y ++;
-            applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grid);
-            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
-            SDL_Flip(screen);
-        }
-
-    }else if(dir==Up){
-
-        while(posInitPixel.y>posArrivalPixel.y){
-            SDL_Delay(DELAY);
-            posInitPixel.y --;
-            applySurface(0,0,fondJeu,screen,NULL);
-            showGrid(imgObject,screen,grid);
-            applySurface(posInitPixel.x,posInitPixel.y,imgObject,screen,&clipAwake);
             SDL_Flip(screen);
         }
     }

@@ -63,7 +63,7 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
  * Functions linked to the level & animation
  * *****************************************/
 
-void anime(level grid, coordgrid posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
+void animate(level grid, coordgrid posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
 void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid);
 
 #endif
