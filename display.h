@@ -12,7 +12,7 @@
 #include "movement.h"
 
 /********************************************
- * Initialisation pour l'affichage
+ * Initializations of constant variables
  * *******************************************/
 
 const SDL_Rect clipWall{70,68,55,62};
@@ -32,21 +32,21 @@ const int coefy = 52;
 const int coefx = 60;
 
 /*********************************
- * FONCTIONS D'IMAGES
+ * Image functions
  * *******************************/
 SDL_Surface *loadImage( std::string filename );
+SDL_Surface * loadImageWithColorKey(std::string filename, int r, int g, int b);
 
 /*********************************
  * Fonctions d'application d'images
  * *******************************/
 void applySurface(int x, int y, SDL_Surface* source, SDL_Surface* destination, const SDL_Rect *clip);
-SDL_Surface * loadImageWithColorKey(std::string filename, int r, int g, int b);
 
+/***************************************************
+ * Functions linked with the interation of the user
+ * *************************************************/
 
-// autre
 bool overCircle(int circleX, int circleY, int circleR);
-
-
 bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *screen,
                    int xButton, int yButton, int rButton,
                    int xOverDisplay, int yOverDisplay,
@@ -54,9 +54,11 @@ bool dynamicButton(SDL_Surface *imgOver, SDL_Surface *imgDefault, SDL_Surface *s
                    SDL_Rect *overClip, SDL_Rect *defaultClip,
                    SDL_Event event);
 
-void anime(level grid, coordgrid posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
+/*******************************************
+ * Functions linked to the level & animation
+ * *****************************************/
 
-// Version 3
+void anime(level grid, coordgrid posFin2, SDL_Surface *screen, SDL_Surface *imgObject, int dir, int idMonster, SDL_Surface *fondJeu);
 void showGrid(SDL_Surface *imgObject, SDL_Surface *screen,level grid);
 
 #endif

@@ -51,8 +51,6 @@ int main()
     /**************************************
      * Initialisations liées à la grid et au lvl
      * ************************************/
-
-    // Version 3
     int lvl = 1;
     level grid;
     initLevel(lvl,grid);
@@ -67,7 +65,6 @@ int main()
     bool quit = false;
     int dir = Null;
     bool outOfGrid=false;
-
     int monsterId = -1;
     // k est un incrément comme i pourrait l'etre
     int k = 0;
@@ -80,13 +77,13 @@ int main()
         switch(Game_State){
         case Menu:
 
-            while(SDL_PollEvent(&event)){
-            }
-
+            while(SDL_PollEvent(&event)){}
 
             if(event.type==SDL_QUIT){
                 quit=true;
             }
+
+            // If we click on the dynamic button, the game state changes to "play"
             if(dynamicButton(backgroundHomeAlternative,backgroundHomeDefault,screen,BOUTON_MIDDLE_X,BOUTON_MIDDLE_Y,BUTTON_RADIUS,0,0,0,0,NULL,NULL,event)){
                 Game_State=Play;
             }
@@ -97,40 +94,41 @@ int main()
 
             applySurface(0,0,backgroundInGame,screen,NULL);
 
-            while (SDL_PollEvent(&eventM)){
-
-            }
+            while (SDL_PollEvent(&eventM)){}
 
             if(eventM.type==SDL_QUIT){
                 quit=true;
             }
-
-            // Version 3
 
             showGrid(imgObject,screen,grid);
 
             dir=direction(eventM,mouseDown,mouseDownReleased,swipe);
             monsterId=hitboxMonster(grid,mouseDown,k);
 
+            // If the user swiped the mouse over a monster
             if(dir != Null && monsterId!= -1)
             {
+                // The grid updates itself with the information of the direction and the monster selected
                 updateLevel(grid,monsterId,dir,outOfGrid,screen,imgObject,backgroundInGame);
                 dir = Null;
             }
-            if(overCircle(93,531,26)){
+            // If the user click on the reset button, in-game, the level initializes itself
+            if(overCircle(93,531,26) && eventM.type==SDL_MOUSEBUTTONDOWN){
                 initLevel(lvl,grid);
             }
 
-
+            // If the is no more monsters sleeping, the level changes after a little delay
             if(grid.nbMonsterSleeping==0){
                 applySurface(0,0,backgroundInGame,screen,NULL);
                 showGrid(imgObject,screen,grid);
                 SDL_Flip(screen);
                 SDL_Delay(200);
                 lvl ++;
+                // If it was the last level, the game state changes to "GameOver"
                 if(lvl>NB_LEVEL){
                     Game_State=GameOver;
                 }else{
+                    // Otherwise, the level changes and the level initializes itself according to the level
                     applySurface(0,0,transition,screen,NULL);
                     SDL_Flip(screen);
                     dir = Null;
@@ -138,6 +136,7 @@ int main()
                     initLevel(lvl,grid);
                 }
 
+            // Otherwise, the level initialize itself (when the monster is out of the grid)
             }else if(outOfGrid){
                 initLevel(lvl,grid);
             }
@@ -147,16 +146,14 @@ int main()
 
         case GameOver:
 
-            while (SDL_PollEvent(&eventM)){
+            while (SDL_PollEvent(&eventM)){}
 
+            applySurface(0,0,endgame,screen,NULL);
+            SDL_Flip(screen);
+
+            if(eventM.type==SDL_QUIT){
+                quit=true;
             }
-
-        applySurface(0,0,endgame,screen,NULL);
-        SDL_Flip(screen);
-
-        if(eventM.type==SDL_QUIT){
-            quit=true;
-        }
 
             break;
         }

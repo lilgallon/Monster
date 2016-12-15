@@ -4,22 +4,22 @@ using namespace std;
 
 // Structure level
 
-/****************** Nom de la fonction **********************
-* initTabLevel                                              *
+/****************** Function's name *************************
+* initaryLevel                                              *
 ******************** Auteur , Dates *************************
 * Lilian GALLON, 09/11/16                                   *
 ********************* Description ***************************
-* Initialise la "grid" selon le niveau                    *
-*********************** Entrées *****************************
-* La grid, et le niveau                                   *
-*********************** Sorties *****************************
+* Initializes the grid according to the level               *
+*********************** Entries *****************************
+* The grid and the level                                    *
+*********************** Output ******************************
 * -                                                         *
 ************************************************************/
 
 void initLevel(int lvl, level & grid)
 {
 
-    // Initialise les positions des objets
+    // Initializes the number of the objects
     grid.nbArrow=0;
     grid.nbIce=0;
     grid.nbMonster=0;
@@ -29,84 +29,84 @@ void initLevel(int lvl, level & grid)
     switch(lvl){
     case 1 :
 
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=1;
-        grid.tabMonster[1].c=4;
-        grid.tabMonster[1].type=SLEEPING;
-        // Nb objects
+        grid.aryMonster[1].l=1;
+        grid.aryMonster[1].c=4;
+        grid.aryMonster[1].type=SLEEPING;
+        // Nb of the objects
         grid.nbMonsterSleeping=1;
         grid.nbMonster=1;
         break;
 
     case 2 :
         // Awake monster
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=1;
-        grid.tabMonster[1].c=4;
-        grid.tabMonster[1].type=SLEEPING;
-        // Nb objects
+        grid.aryMonster[1].l=1;
+        grid.aryMonster[1].c=4;
+        grid.aryMonster[1].type=SLEEPING;
+        // Nb of the objects
         grid.nbMonsterSleeping=1;
         grid.nbMonster=1;
         break;
 
     case 3 :
         // Awake monster
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=6;
-        grid.tabMonster[1].c=3;
-        grid.tabMonster[1].type=SLEEPING;
+        grid.aryMonster[1].l=6;
+        grid.aryMonster[1].c=3;
+        grid.aryMonster[1].type=SLEEPING;
         // Wall
-        grid.tabWall[0].l=1;
-        grid.tabWall[0].c=4;
-        // Nb objects
+        grid.aryWall[0].l=1;
+        grid.aryWall[0].c=4;
+        // Nb of the objects
         grid.nbMonsterSleeping=1;
         grid.nbMonster=1;
         grid.nbWall=1;
         break;
     case 4 :
         // Awake monster
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=6;
-        grid.tabMonster[1].c=3;
-        grid.tabMonster[1].type=SLEEPING;
+        grid.aryMonster[1].l=6;
+        grid.aryMonster[1].c=3;
+        grid.aryMonster[1].type=SLEEPING;
         // Arrow
-        grid.tabArrow[0].l=1;
-        grid.tabArrow[0].c=3;
-        grid.tabArrow[0].type=Down;
-        // Nb objects
+        grid.aryArrow[0].l=1;
+        grid.aryArrow[0].c=3;
+        grid.aryArrow[0].type=Down;
+        // Nb of the objects
         grid.nbMonster=1;
         grid.nbMonsterSleeping=1;
         grid.nbArrow=1;
         break;
     case 5 :
         // Awake monster
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=6;
-        grid.tabMonster[1].c=3;
-        grid.tabMonster[1].type=SLEEPING;
+        grid.aryMonster[1].l=6;
+        grid.aryMonster[1].c=3;
+        grid.aryMonster[1].type=SLEEPING;
         // Arrow
-        grid.tabArrow[0].l=1;
-        grid.tabArrow[0].c=3;
-        grid.tabArrow[0].type=Down;
+        grid.aryArrow[0].l=1;
+        grid.aryArrow[0].c=3;
+        grid.aryArrow[0].type=Down;
         // Ice
-        grid.tabIce[0].l=3;
-        grid.tabIce[0].c=3;
-        // Nb objects
+        grid.aryIce[0].l=3;
+        grid.aryIce[0].c=3;
+        // Nb of the objects
         grid.nbMonster=1;
         grid.nbMonsterSleeping=1;
         grid.nbArrow=1;
@@ -114,21 +114,21 @@ void initLevel(int lvl, level & grid)
         break;
     case 6 :
         // Awake monster
-        grid.tabMonster[0].l=1;
-        grid.tabMonster[0].c=1;
-        grid.tabMonster[0].type=STANDARD;
+        grid.aryMonster[0].l=1;
+        grid.aryMonster[0].c=1;
+        grid.aryMonster[0].type=STANDARD;
         // Sleeping monster
-        grid.tabMonster[1].l=6;
-        grid.tabMonster[1].c=3;
-        grid.tabMonster[1].type=SLEEPING;
+        grid.aryMonster[1].l=6;
+        grid.aryMonster[1].c=3;
+        grid.aryMonster[1].type=SLEEPING;
         // Arrow
-        grid.tabArrow[0].l=1;
-        grid.tabArrow[0].c=3;
-        grid.tabArrow[0].type=Down;
+        grid.aryArrow[0].l=1;
+        grid.aryArrow[0].c=3;
+        grid.aryArrow[0].type=Down;
         // Ice
-        grid.tabIce[0].l=3;
-        grid.tabIce[0].c=3;
-        // Nb objects
+        grid.aryIce[0].l=3;
+        grid.aryIce[0].c=3;
+        // Nb of the objects
         grid.nbMonster=1;
         grid.nbMonsterSleeping=1;
         grid.nbArrow=1;

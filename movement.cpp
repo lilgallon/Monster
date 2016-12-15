@@ -5,36 +5,35 @@
 
 using namespace std;
 
-/****************** Nom de la fonction **********************
-* suppOccurenceIce                                          *
-******************** Auteur , Dates *************************
+/****************** Function's name *************************
+* suppOccIce                                                *
+******************** Authors , Dates ************************
 * Lilian GALLON, 12/12/16                                   *
 ********************* Description ***************************
-* Supprime une occurence d'un tableau                       *
-*********************** Entrées *****************************
-* LA grid, et l'indice de la glace à effacer              *
-*********************** Sorties *****************************
+* Deletes an occurence of an array                          *
+*********************** Entries *****************************
+* The grid and the index of the ice to delete               *
+*********************** Output ******************************
 * -                                                         *
 ************************************************************/
 
 void suppOccIce(level &grid,int idIce){
+    // Browses the grid by shifting every occurence to the left
     for(int i=0; i<grid.nbIce ; i++){
-        grid.tabIce[idIce+i]=grid.tabIce[idIce+1+i];
+        grid.aryIce[idIce+i]=grid.aryIce[idIce+1+i];
     }
 }
 
-
-
-/****************** Nom de la fonction **********************
+/****************** Function's name *************************
 * absoluteValue                                             *
-******************** Auteur , Dates *************************
+******************** Authors , Dates ************************
 * Tristan RENAUDON, 09/11/16                                *
 ********************* Description ***************************
-* Convertie une valeur en valeur absolue                    *
-*********************** Entrées *****************************
-* Une valeur entière                                        *
-*********************** Sorties *****************************
-* La valeur absolue                                         *
+* Converts a value to an absolute one                       *
+*********************** Entries *****************************
+* An integer value                                          *
+*********************** Output ******************************
+* An absolute value                                         *
 ************************************************************/
 int absoluteValue(int val)
 {
@@ -45,21 +44,21 @@ int absoluteValue(int val)
     return val;
 }
 
-/****************** Nom de la fonction **********************
+/****************** Function's name *************************
 * direction                                                 *
-******************** Auteur , Dates *************************
+******************** Authors , Dates ************************
 * Tristan RENAUDON, 09/11/16                                *
 ********************* Description ***************************
-* Donne la direction choisie en fonction du mouvement de la *
-* souris                                                    *
-*********************** Entrées *****************************
-* Une gestion d'évènement, les coordonnées de la souris     *
-* clic enfoncé + clic relaché, valeur absolue de la distance*
-*********************** Sorties *****************************
-* Direction choisie                                         *
+* Gives the direction chosen according to the mouse movement*
+*********************** Entries *****************************
+* An event variable, the mouse position when clicked, and   *
+* released, the absolute value of the distance              *
+*********************** Output ******************************
+* Chosen direction                                          *
 ************************************************************/
 int direction(SDL_Event &eventM, coordCartesian &mouseDown, coordCartesian mouseDownReleased, coordCartesian swipe)
 {
+    // Gets the positions of the mouse when pushed
     if (eventM.type == SDL_MOUSEBUTTONDOWN){
         if (eventM.button.button==SDL_BUTTON_LEFT)
         {
@@ -67,39 +66,42 @@ int direction(SDL_Event &eventM, coordCartesian &mouseDown, coordCartesian mouse
             mouseDown.y=eventM.button.y;
         }
     }
-
+    // gets the positions of the mouse when released
     else if (eventM.type == SDL_MOUSEBUTTONUP)
     {
+        // It works only if the click was made on the left button
         if (eventM.button.button==SDL_BUTTON_LEFT)
         {
+            // Gets the difference between those values
             mouseDownReleased.x=eventM.button.x-mouseDown.x;
             mouseDownReleased.y=eventM.button.y-mouseDown.y;
 
+            // Gets a swipe value from the precendent ones
             swipe.x=absoluteValue(mouseDownReleased.x);
             swipe.y=absoluteValue(mouseDownReleased.y);
 
-            // Droite
+            // Right
             if (mouseDownReleased.x>0 && swipe.x>swipe.y)
             {
                 mouseDownReleased.x=0;
                 return Right;
             }
 
-            // Gauche
+            // Left
             else if (mouseDownReleased.x<0 && swipe.x>swipe.y)
             {
                 mouseDownReleased.x=0;
                 return Left;
             }
 
-            // Bas
+            // Down
             else if (mouseDownReleased.y>0 && swipe.y>swipe.x)
             {
                 mouseDownReleased.y=0;
                 return Down;
             }
 
-            // Haut
+            // Up
             else if (mouseDownReleased.y<0 && swipe.y>swipe.x)
             {
                 mouseDownReleased.y=0;
@@ -113,56 +115,65 @@ int direction(SDL_Event &eventM, coordCartesian &mouseDown, coordCartesian mouse
 }
 
 
-/****************** Nom de la fonction **********************
+/****************** Function's name *************************
 * hitboxMonster                                             *
-******************** Auteur , Dates *************************
+******************** Authors , Dates ************************
 * Tristan RENAUDON, 09/12/16                                *
 ********************* Description ***************************
-* Deteecte si la souris clique sur un monster               *
-*********************** Entrées *****************************
-* la grid, les coordonnées de la souris lors d'un clique  *
-* la taille x/y d'une case, et l'offset de l'image          *
-*********************** Sorties *****************************
-* l'indice du monster détécté -1 sinon                      *
+* Detects if the mouse click was made on a monster, and     *
+* which one                                                 *
+*********************** Entries *****************************
+* The level, the mouse positions when a click was made, and *
+* the offset of the background (origin positions)           *
+*********************** Output ******************************
+* The index of the monster detected, -1 otherwise           *
 ************************************************************/
 int hitboxMonster(level grid, coordCartesian mouseDown, int &k)
 {
     int j=-1;
     bool onMonster=false;
 
+    // Loops the monster's array
     if( k<grid.nbMonster && !onMonster )
     {
-        if (    grid.tabMonster[k].l*coefy+initialOff.yOffset <= mouseDown.y
-                && (grid.tabMonster[k].l+1)*coefy+initialOff.yOffset >= mouseDown.y
-                && grid.tabMonster[k].c*coefx+initialOff.xOffset <= mouseDown.x
-                && (grid.tabMonster[k].c+1)*coefx+initialOff.xOffset >= mouseDown.x
-                && grid.tabMonster[k].type==STANDARD)
+        // If the index "k" corresponds to a standard monster
+        if (    grid.aryMonster[k].l*coefy+initialOff.yOffset <= mouseDown.y
+                && (grid.aryMonster[k].l+1)*coefy+initialOff.yOffset >= mouseDown.y
+                && grid.aryMonster[k].c*coefx+initialOff.xOffset <= mouseDown.x
+                && (grid.aryMonster[k].c+1)*coefx+initialOff.xOffset >= mouseDown.x
+                && grid.aryMonster[k].type==STANDARD)
         {
+            // We conclude that we are on a monster
+            // and its index is "k"
             onMonster=true;
             j=k;
         }
+        // If the k index did not correspond to the monster when the user clicked
+        // we increment k to check for the next index
         k++;
     }
+    // If we are at the end of the monster's array, we reset k to 0 to continue checking
     if(k>=grid.nbMonster)
     {
         k=0;
     }
+    // Returns j which is -1 if we did not find a monster on the mouse cursor
+    // Otherwise it returns the index of the monster
     return j;
 }
 
-/****************** Nom de la fonction **********************
+/****************** Function's name *************************
 * coefDir                                                   *
-******************** Auteur , Dates *************************
+******************** Authors , Dates ************************
 * Lilian GALLON , 09/12/16                                  *
 ********************* Description ***************************
-* Calcule les coefficients en fonction de la direction du   *
-* monster                                                   *
-*********************** Entrées *****************************
-* La direction du monster                                   *
-*********************** Sorties *****************************
-* Les coefficients de la direction du monster               *
+* Calculates the coefficients according to the direction of *
+* the monster which will be used after                      *
+*********************** Entries *****************************
+* The direction of the monster                              *
+*********************** Output ******************************
+* The coefficients of the direction of the monster          *
 *************************************************************/
-
 coordgrid coefDir(int dir){
     coordgrid coef;
     if(dir==Up){coef.l = -1; coef.c=0;}
@@ -172,104 +183,137 @@ coordgrid coefDir(int dir){
     return coef;
 }
 
-/****************** Nom de la fonction **********************
+/****************** Function's name *************************
 * updateLevel                                               *
-******************** Auteur , Dates *************************
+******************** Authors , Dates ************************
 * Lilian GALLON & Tristan Renaudon, 07/12/16                *
 ********************* Description ***************************
-* Met à jour la grid et anime le déplacement d'un monster *
-************************ Entrées ****************************
-* La structure level, la direction choisie,                 *
-* d'id du monster à déplacer, et une variable indiquant si  *
-* le monster est sorti de la grid                         *
-*********************** Sorties *****************************
+* Updates the grid according to the direction of the monster*
+* and animates the movement the monster to move             *
+* Met à jour la grid et anime le déplacement d'un monster   *
+************************ Entries ****************************
+* The level, the index of the monster to moven the direction*
+* a variable which returns true if the monster is out of the*
+* grid, the surface where the level will be displayed, the  *
+* sprite, and the background of the game                    *
+*********************** Output *****************************
 * -                                                          *
 *************************************************************/
 
 
 void updateLevel(level &grid,int monsterId, int dir, bool &outOfGrid, SDL_Surface *screen, SDL_Surface *imgObject, SDL_Surface *fondJeu){
 
-    coordgrid monster;
-    monster.l=grid.tabMonster[monsterId].l;
-    monster.c=grid.tabMonster[monsterId].c;
-    bool exit = false;
-    int lineCoef;
-    int columnCoef;
 
-    // Faire des if pour trouver les coef selon dir
-    columnCoef=coefDir(dir).c;
-    lineCoef=coefDir(dir).l;
+    bool exit = false;
+
+    // We get the different steps (1,-1,0)
+    int columnCoef=coefDir(dir).c;
+    int lineCoef=coefDir(dir).l;
+
+    // The initial position of the monster to move is temporarily stored
+    coordgrid monster;
+    monster.l=grid.aryMonster[monsterId].l;
+    monster.c=grid.aryMonster[monsterId].c;
 
     while(!exit){
-
+        // Browses the arrows' array
         for(int i=0;i<grid.nbArrow;i++){
-            if(grid.tabArrow[i].l==monster.l+lineCoef && grid.tabArrow[i].c==monster.c+columnCoef){
+            // If we find an arrow in the next cell
+            if(grid.aryArrow[i].l==monster.l+lineCoef && grid.aryArrow[i].c==monster.c+columnCoef){
+                // We move forward to the arrow
                 monster.c=monster.c+columnCoef;
                 monster.l=monster.l+lineCoef;
+                // Then, we animate the movement according to :
+                // The initial position: grid.aryMonster[monsterId].l/c:
+                // The final position: monster.l/c
                 anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-                dir=grid.tabArrow[i].type;
+                // Then we change the direction
+                dir=grid.aryArrow[i].type;
+                // By changing the steps
                 columnCoef=coefDir(dir).c;
                 lineCoef=coefDir(dir).l;
-                grid.tabMonster[monsterId].l=monster.l;
-                grid.tabMonster[monsterId].c=monster.c;
-                anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                // Then we update the grid with the current position
+                grid.aryMonster[monsterId].l=monster.l;
+                grid.aryMonster[monsterId].c=monster.c;
             }
         }
-
-        if(monster.l+lineCoef==TAILLE_LINE || monster.l+lineCoef==-1 || monster.c+columnCoef==TAILLE_COLUMN || monster.c+columnCoef==-1){
+        // If the next cell of the monster is out of the grid
+        if(monster.l+lineCoef==LINE_SIZE || monster.l+lineCoef==-1 || monster.c+columnCoef==COLUMN_SIZE || monster.c+columnCoef==-1){
+            // We animate the movement
             anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+            // We set that the monster is out of the grid
             outOfGrid=true;
+            // We go out of the while loop
             exit = true;
         }
 
-        // On vérifie si il ya un monster sur le passage
+        // Browses the monsters's array
         for(int i=0;i<grid.nbMonster+grid.nbMonsterSleeping;i++){
-            if(grid.tabMonster[i].type==STANDARD && monsterId!=i){
-                if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
+            // If we find a monster in the NEXT cell
+            // so the case with the same monster, when i=idMonster isn't a problem
+            if(grid.aryMonster[i].type==STANDARD){
+                // If it is a standard monster, we just stop the movement, and we animate the monster
+                if(grid.aryMonster[i].l==monster.l+lineCoef && grid.aryMonster[i].c==monster.c+columnCoef){
                 anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
                 }
             }
-            if(grid.tabMonster[i].type==SLEEPING && monsterId!=i){
-                if(grid.tabMonster[i].l==monster.l+lineCoef && grid.tabMonster[i].c==monster.c+columnCoef){
+            if(grid.aryMonster[i].type==SLEEPING){
+                // If it is a sleepong monster, we update the type of the monster to a "standard" one
+                if(grid.aryMonster[i].l==monster.l+lineCoef && grid.aryMonster[i].c==monster.c+columnCoef){
+                    // We animate before updating the level
                     anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
-                    grid.tabMonster[i].type=STANDARD;
+                    // We set the monster to a standard one
+                    grid.aryMonster[i].type=STANDARD;
+                    // We remove one monster sleeping
                     grid.nbMonsterSleeping --;
+                    // And we add one more normal
                     grid.nbMonster ++;
                     exit = true;
                 }
             }
         }
 
-        // On vérifie si il y a un mur sur le passage
+        // If there is a wall, we stop it
         for(int i=0;i<grid.nbWall;i++){
-            if(grid.tabWall[i].l==monster.l+lineCoef && grid.tabWall[i].c==monster.c+columnCoef){
+            if(grid.aryWall[i].l==monster.l+lineCoef && grid.aryWall[i].c==monster.c+columnCoef){
                 anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
                 exit = true;
             }
         }
 
         for(int i=0;i<grid.nbIce;i++){
-            if(grid.tabIce[i].l==monster.l+lineCoef && grid.tabIce[i].
+            // If the monster find an ice block just next to him before moving
+            // it does nothing
+            // the difference is made by :
+            // monster.l==grid.aryMonster[monsterId].l &&
+            // monster.c==grid.aryMonster[monsterId].c
+            if(grid.aryIce[i].l==monster.l+lineCoef && grid.aryIce[i].
                     c==monster.c+columnCoef
-                    && monster.l==grid.tabMonster[monsterId].l
-                    && monster.c==grid.tabMonster[monsterId].c){
+                    && monster.l==grid.aryMonster[monsterId].l
+                    && monster.c==grid.aryMonster[monsterId].c){
                 exit = true;
-            }else if(grid.tabIce[i].l==monster.l+lineCoef && grid.tabIce[i].c==monster.c+columnCoef){
+            // otherwise, if the monster already moved and we find an ice block
+            }else if(grid.aryIce[i].l==monster.l+lineCoef && grid.aryIce[i].c==monster.c+columnCoef){
+                // We animate the movement
                 anime(grid, monster,screen,imgObject,dir, monsterId,fondJeu);
+                // We delete an ice from its array
                 suppOccIce(grid,i);
+                // We remove one ice from the total number of ice
                 grid.nbIce = grid.nbIce - 1;
                 exit = true;
             }
         }
+        // If we did not exit, we increment the positions of the monster
         if(!exit){
             monster.c=monster.c+columnCoef;
             monster.l=monster.l+lineCoef;
         }
     }
 
-    grid.tabMonster[monsterId].l=monster.l;
-    grid.tabMonster[monsterId].c=monster.c;
+    // When everything is okay, we update the grid with the new monster position
+    grid.aryMonster[monsterId].l=monster.l;
+    grid.aryMonster[monsterId].c=monster.c;
 
 
 }
