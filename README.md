@@ -3,7 +3,7 @@
 ![opissues](https://img.shields.io/github/issues/N3ROO/Monster.svg) 
 ![clissues](https://img.shields.io/github/issues-closed/N3ROO/Monster.svg)
 
-Made for the Introduction to programming course at the Bordeaux Institude of Technology (grade: 17.5/20).
+Made for the Introduction to programming course at the Bordeaux Institute of Technology (grade: 17.5/20).
 
 ## 1. Getting started
 ### 1.1 Prerequisites
