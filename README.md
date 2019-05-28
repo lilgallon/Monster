@@ -5,8 +5,6 @@
 
 Made for the Introduction to programming course at the Bordeaux Institude of Technology (grade: 17.5/20).
 
-![preview](.github/screenshot.png)
-
 ## 1. Getting started
 ### 1.1 Prerequisites
 You need SDL2 & linux.
